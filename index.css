@@ -1,85 +1,74 @@
-/* ตั้งค่าสีพื้นหลังและฟอนต์ */
+/* พื้นหลังหน้า และฟอนต์ */
 body {
-  background-color: #f0f2f5;  /* สีพื้นหลังอ่อนแบบ Facebook */
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #1c1e21;
+  background: linear-gradient(135deg, #1f2a44 0%, #16202b 100%);
+  color: #e0e6f3;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 0;
+  padding: 60px 20px;
   display: flex;
-  justify-content: center; /* กึ่งกลางแนวนอน */
-  align-items: center;     /* กึ่งกลางแนวตั้ง */
-  height: 100vh;           /* เต็มหน้าจอสูง */
   flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* ตัวหัวเรื่องใหญ่ */
+/* หัวข้อใหญ่ */
 h1 {
   font-size: 2.5rem;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   font-weight: 700;
-  color: #1877f2; /* สีน้ำเงินแบบ Facebook */
+  color: #42f584;
+  text-shadow: 0 0 12px #42f584aa;
+  text-align: center;
 }
 
-/* จัดรูปแบบให้แต่ละบรรทัดเป็นกล่องแนวตั้ง */
-p {
-  margin: 15px 0;
-  width: 320px;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ตั้งค่าป้ายชื่อ label ให้ดูชัดเจน */
-label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  font-size: 1rem;
-}
-
-/* รูปแบบช่อง input */
+/* กล่อง Input */
 input[type="text"],
 input[type="password"] {
-  padding: 12px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccd0d5;
+  width: 320px;
+  padding: 14px 18px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: none;
   font-size: 1rem;
-  outline-color: #1877f2;
-  transition: border-color 0.3s ease;
-}
-
-/* เปลี่ยนสีขอบเมื่อโฟกัส */
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-color: #1877f2;
+  outline: none;
+  background: #223344;
+  color: #e0e6f3;
+  box-shadow: 0 4px 12px #42f58455;
 }
 
 /* ปุ่มเข้าสู่ระบบ */
 button {
-  margin-top: 25px;
   width: 320px;
   padding: 14px 0;
-  background-color: #42b72a; /* สีเขียวสดใส */
+  margin-top: 20px;
+  border-radius: 12px;
   border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  background: #42f584;
+  color: #1f2a44;
+  box-shadow: 0 4px 15px #38ca6a55;
+  transition: all 0.3s ease;
 }
 
-/* Hover ปุ่ม */
 button:hover {
-  background-color: #36a420;
+  background: #38ca6a;
+  box-shadow: 0 6px 20px #2e9d4f55;
+  transform: translateY(-2px);
 }
 
 /* ข้อความรหัสทดสอบ */
-p:last-of-type,
-p:nth-last-of-type(2) {
-  width: 320px;
-  font-size: 0.9rem;
-  color: #666;
-  margin-top: 30px;
-  font-style: italic;
-  user-select: none; /* ไม่ให้ข้อความถูกเลือก */
+p {
+  margin-top: 12px;
   text-align: center;
+  font-size: 0.9rem;
+  color: #a0d8f7;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  input[type="text"], input[type="password"], button {
+    width: 90%;
+  }
 }
