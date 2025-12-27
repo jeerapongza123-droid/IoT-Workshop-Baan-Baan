@@ -44,9 +44,27 @@
     button:hover { opacity: 0.85; }
     #btnOn { background-color: #28a745; }
     #btnOff { background-color: #dc3545; }
+
+    /* ===== เพิ่ม: แจ้งเตือนอยู่ในช่วงพัฒนา ===== */
+    .dev-banner {
+      background: #ffc107;
+      color: #000;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- ===== เพิ่ม: แถบอยู่ในช่วงพัฒนา ===== -->
+  <div class="dev-banner">
+    🚧 ระบบอยู่ในช่วงพัฒนา (Development Mode) 🚧
+  </div>
+
   <h1>📡 ESP32 Dashboard</h1>
 
   <!-- Sensor Data -->
@@ -66,29 +84,29 @@
   </div>
 
   <script>
-    const API_BASE = "https://node-server-p56n.onrender.com/api"; // เปลี่ยนให้ตรงกับ server ของคุณ
+    const API_BASE = "https://node-server-p56n.onrender.com/api";
 
-    // โหลด sensor data
     async function fetchSensorData() {
       try {
         const res = await fetch(`${API_BASE}/sensor`);
         if (!res.ok) throw new Error("Network response was not ok");
         const data = await res.json();
 
-        // แสดง temp / humidity ถ้ามีในข้อมูล
-        document.getElementById("temp").textContent = data.temperature ? `${data.temperature} °C` : "-- °C";
-        document.getElementById("humi").textContent = data.humidity ? `${data.humidity} %` : "-- %";
+        document.getElementById("temp").textContent =
+          data.temperature ? `${data.temperature} °C` : "-- °C";
+        document.getElementById("humi").textContent =
+          data.humidity ? `${data.humidity} %` : "-- %";
 
-        // แสดงข้อมูลดิบทั้งหมด
-        document.getElementById("dataOutput").textContent = JSON.stringify(data, null, 2);
+        document.getElementById("dataOutput").textContent =
+          JSON.stringify(data, null, 2);
 
       } catch (err) {
         console.error(err);
-        document.getElementById("dataOutput").textContent = "Error fetching data";
+        document.getElementById("dataOutput").textContent =
+          "Error fetching data";
       }
     }
 
-    // ส่งคำสั่ง ON/OFF
     async function sendCommand(value) {
       try {
         const res = await fetch(`${API_BASE}/command`, {
@@ -104,9 +122,7 @@
       }
     }
 
-    // โหลดข้อมูลครั้งแรก
     fetchSensorData();
-    // รีเฟรชทุก 5 วินาที
     setInterval(fetchSensorData, 5000);
   </script>
 </body>
