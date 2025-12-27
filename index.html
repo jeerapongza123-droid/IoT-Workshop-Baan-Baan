@@ -4,28 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ควบคุมอุปกรณ์ไฟฟ้าผ่าน MQTT</title>
-<script src="test.js"></script>
- <link rel="stylesheet" href="index.css">
+
+    <script src="test.js"></script>
+
+    <style>
+      /* ===== ข้อความอยู่ในช่วงพัฒนา ===== */
+      .dev-text {
+        text-align: center;
+        font-size: 36px;
+        font-weight: bold;
+        color: red;
+        margin: 20px 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+
+      input {
+        padding: 8px;
+        width: 250px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+      }
+    </style>
   </head>
+
   <body>
 
- <h1>เข้าสู่ระบบ</h1>
+    <!-- ข้อความตัวใหญ่ -->
+    <div class="dev-text">
+      🚧 ระบบอยู่ในช่วงพัฒนา (Development Mode) 🚧
+    </div>
 
-<p>
-  <label for="userId">รหัสผู้ใช้งาน (ID):</label>
-  <input id="userId" type="text" placeholder="กรอก ID ของคุณ">
-</p>
+    <h1>เข้าสู่ระบบ</h1>
 
-<p>
-  <label for="pass">รหัสผ่าน (PW):</label>
-  <input id="pass" type="password" placeholder="กรอกรหัสผ่านของคุณ">
-</p>
+    <p>
+      <label for="userId">รหัสผู้ใช้งาน (ID):</label><br>
+      <input id="userId" type="text" placeholder="กรอก ID ของคุณ">
+    </p>
 
-<button type="button" onclick="login()">เข้าสู่ระบบ</button>
+    <p>
+      <label for="pass">รหัสผ่าน (PW):</label><br>
+      <input id="pass" type="password" placeholder="กรอกรหัสผ่านของคุณ">
+    </p>
 
+    <button type="button" onclick="login()">เข้าสู่ระบบ</button>
 
-<p> รหัส ทดสอบ</p>
-<p> "ID:"  admin "password:"  123</p>
+    <p>รหัสทดสอบ</p>
+    <p>ID: <b>admin</b> | Password: <b>123</b></p>
 
   </body>
 </html>
