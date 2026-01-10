@@ -177,21 +177,43 @@
             color: var(--primary-color);
         }
     </style>
+    <style>
+        /* สร้าง animation หมุน */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
 
     <script>
-        // --- ส่วน JavaScript คงเดิมทุกประการตามคำขอ ---
-        function login() {
+        function loginWithLoading() {
+            const btn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('loginText');
+            const icon = document.getElementById('loginIcon');
+
+            // เปลี่ยนข้อความและเพิ่ม class spin ให้ไอคอน
+            btnText.innerText = 'กำลังเชื่อมต่อ...';
+            icon.className = 'fas fa-spinner spin'; // ใช้ไอคอน spinner
+            btn.disabled = true;
+
             const userId = document.getElementById("userId").value;
             const pass = document.getElementById("pass").value;
 
             fetch('https://node-server-p56n.onrender.com/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, pass })
             })
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         sessionStorage.setItem("isLoggedIn", "true");
@@ -200,12 +222,19 @@
                         alert("รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
-                    console.error(error);
+                    console.error(err);
+                })
+                .finally(() => {
+                    // กลับเป็นข้อความและไอคอนปกติ
+                    btnText.innerText = 'เข้าสู่ระบบ';
+                    icon.className = 'fas fa-arrow-right';
+                    btn.disabled = false;
                 });
         }
     </script>
+
 </head>
 
 <body>
@@ -234,9 +263,9 @@
             <input id="pass" type="password" placeholder="กรอกรหัสผ่าน">
         </div>
 
-        <button type="button" onclick="login()">
-            <span>เข้าสู่ระบบ</span>
-            <i class="fas fa-arrow-right"></i>
+        <button type="button" id="loginBtn" onclick="loginWithLoading()">
+            <span id="loginText">เข้าสู่ระบบ</span>
+            <i id="loginIcon" class="fas fa-arrow-right"></i>
         </button>
 
         <div class="test-account">
@@ -246,6 +275,5 @@
     </div>
 
 </body>
-
 
 </html>
