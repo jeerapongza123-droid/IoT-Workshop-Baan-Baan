@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>IoT WorkShop Baan Baan - Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --bg-color: #f4f7fe;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --danger: #e74a3b;
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            --radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+
+        /* ป้ายแจ้งเตือน Development */
+        .dev-badge {
+            position: absolute;
+            top: 25px;
+            background: rgba(231, 74, 59, 0.1);
+            color: var(--danger);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1px solid rgba(231, 74, 59, 0.2);
+        }
+
+        /* การ์ด Login สไตล์ Modern Minimalist */
+        .login-card {
+            width: 90%;
+            max-width: 400px;
+            padding: 45px 35px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .icon-header {
+            width: 70px;
+            height: 70px;
+            background: rgba(78, 115, 223, 0.1);
+            color: var(--primary-color);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 25px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 0 0 10px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        p.subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+        }
+
+        /* Input Group */
+        .input-group {
+            text-align: left;
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 43px;
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            margin-left: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 16px 16px 50px;
+            background: #f8f9fc;
+            border: 2px solid #f1f3f9;
+            border-radius: 18px;
+            color: var(--text-main);
+            font-size: 16px;
+            font-family: 'Prompt';
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            background: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 20px rgba(78, 115, 223, 0.08);
+        }
+
+        /* ปุ่มกดสไตล์ App */
+        button {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Prompt';
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 10px 25px rgba(78, 115, 223, 0.25);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(78, 115, 223, 0.35);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        /* ข้อมูลบัญชีทดสอบ */
+        .test-account {
+            margin-top: 35px;
+            padding: 20px;
+            background: #f8f9fc;
+            border-radius: 18px;
+            font-size: 13px;
+            color: var(--text-muted);
+            border: 1px dashed #d1d8e0;
+        }
+
+        .test-account b {
+            color: var(--primary-color);
+        }
+    </style>
+
+    <script>
+        // --- ส่วน JavaScript คงเดิมทุกประการตามคำขอ ---
+        function login() {
+            const userId = document.getElementById("userId").value;
+            const pass = document.getElementById("pass").value;
+
+            fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId, pass })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        sessionStorage.setItem("isLoggedIn", "true");
+                        window.location.href = "home.html";
+                    } else {
+                        alert("รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
+                    }
+                })
+                .catch(error => {
+                    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+                    console.error(error);
+                });
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="dev-badge">
+        <i class="fas fa-tools"></i> DEVELOPMENT MODE
+    </div>
+
+    <div class="login-card">
+        <div class="icon-header">
+            <i class="fas fa-house-signal"></i>
+        </div>
+
+        <h1>Smart Home</h1>
+        <p class="subtitle">กรุณาเข้าสู่ระบบเพื่อควบคุมอุปกรณ์</p>
+
+        <div class="input-group">
+            <label for="userId">ชื่อผู้ใช้งาน</label>
+            <i class="fas fa-user"></i>
+            <input id="userId" type="text" placeholder="กรอก ID ของคุณ">
+        </div>
+
+        <div class="input-group">
+            <label for="pass">รหัสผ่าน</label>
+            <i class="fas fa-lock"></i>
+            <input id="pass" type="password" placeholder="กรอกรหัสผ่าน">
+        </div>
+
+        <button type="button" onclick="login()">
+            <span>เข้าสู่ระบบ</span>
+            <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <div class="test-account">
+            <p style="margin: 0 0 5px 0;"><i class="fas fa-info-circle"></i> บัญชีทดสอบ</p>
+            <p style="margin: 0;">ID: <b>admin</b> | PW: <b>123</b></p>
+        </div>
+    </div>
+
+</body>
+
+</html>
