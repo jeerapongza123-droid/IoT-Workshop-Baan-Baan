@@ -299,7 +299,31 @@
                             </div>
                             <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
                         </button>
+
+                         <button class="action-btn" onclick="go('setting2')">
+                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                            </div>
+                            <div style="text-align:left; flex-grow:1;">
+                                <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 2</span>
+                                <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
+                            </div>
+                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+                        </button>
+
+                         <button class="action-btn" onclick="go('setting3')">
+                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                            </div>
+                            <div style="text-align:left; flex-grow:1;">
+                                <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 3</span>
+                                <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
+                            </div>
+                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+                        </button>
                     </div>
+
+                    
                 `;
             } else if (page === 'setting1') {
                 connect();
@@ -317,6 +341,12 @@
                             <span>Auto Program 1</span>
                         </button>
                         <p id="setp1" class="status-text">กำลังโหลด...</p>
+
+                        <button class="action-btn" onclick="send_mqtt_interlock('/Repeatp1','1')">
+                            <i class="fas fa-robot" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Set Repeat </span>
+                        </button>
+                        <p id="/Repeatp1_Status" class="status-text">กำลังโหลด...</p>
 
                         <button class="action-btn" onclick="send_mqtt_interlock('/esp_c','ON')">
                             <i class="fas fa-hand-pointer" style="font-size:20px; color:var(--primary-color)"></i>
@@ -362,6 +392,140 @@
                     </div>
                 `;
                 setCurrentTime();
+            } else if (page === 'setting2') {
+                connect();
+                app.innerHTML = `
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-sliders-h"></i> ควบคุมอุปกรณ์</div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
+                            <button class="action-btn btn-primary" onclick="refresh_p2()"><i class="fas fa-sync"></i> รีเฟรช</button>
+                            <button class="action-btn btn-outline-danger" onclick="reset_p2('esp32/Resetp2')"><i class="fas fa-power-off"></i> รีเซ็ต</button>
+                        </div>
+                        
+                        <label class="label-mini">โหมดการทำงาน:</label>
+                        <button class="action-btn" onclick="send_mqtt_interlock('/pro_Gram-2','1')">
+                            <i class="fas fa-robot" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Auto Program 2</span>
+                        </button>
+                        <p id="setp2" class="status-text">กำลังโหลด...</p>
+
+                        <button class="action-btn" onclick="send_mqtt_interlock('/Repeatp2','1')">
+                            <i class="fas fa-robot" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Set Repeat </span>
+                        </button>
+                        <p id="/Repeatp2_Status" class="status-text">กำลังโหลด...</p>
+
+                        <button class="action-btn" onclick="send_mqtt_interlock('/esp_c','ON')">
+                            <i class="fas fa-hand-pointer" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Manual Control</span>
+                        </button>
+                        <p id="/Status" class="status-text">กำลังโหลด...</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title" style="color:var(--success-color)"><i class="fas fa-plus-circle"></i> ตั้งเวลาเปิด (Timer ON)</div>
+                        <div class="days-grid">
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sun','7')">อา.</button><div id="/Sun_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Mon','1')">จ.</button><div id="/Mon_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Tue','2')">อ.</button><div id="/Tue_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Wed','3')">พ.</button><div id="/Wed_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Thu','4')">พฤ.</button><div id="/Thu_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Fri','5')">ศ.</button><div id="/Fri_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sat','6')">ส.</button><div id="/Sat_on_p2" class="day-status">--</div></div>
+                        </div>
+                        <input id="settime1" type="time">
+                        <button class="action-btn btn-success" onclick="set_time('/relay2', document.getElementById('settime1').value)">
+                            <i class="fas fa-save"></i> บันทึกเวลาเปิด
+                        </button>
+                        <p id="/setok-time2" class="status-text">Waiting...</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title" style="color:var(--danger-color)"><i class="fas fa-minus-circle"></i> ตั้งเวลาปิด (Timer OFF)</div>
+                        <div class="days-grid">
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sun_Set_off','7')">อา.</button><div id="/Sun_Status_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Mon_Set_off','1')">จ.</button><div id="/Mon_Status_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Tue_Set_off','2')">อ.</button><div id="/Tue_Status_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Wed_Set_off','3')">พ.</button><div id="/Wed_Status_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Thu_Set_off','4')">พฤ.</button><div id="/Thu_Status_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Fri_Set_off','5')">ศ.</button><div id="/Fri_Status_on_p2" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sat_Set_off','6')">ส.</button><div id="/Sat_Status_on_p2" class="day-status">--</div></div>
+                        </div>
+                        <input id="settime2" type="time">
+                        <button class="action-btn btn-danger" onclick="set_time('/relay3', document.getElementById('settime2').value)">
+                            <i class="fas fa-save"></i> บันทึกเวลาปิด
+                        </button>
+                        <p id="/setokk-time2" class="status-text">Waiting...</p>
+                    </div>
+                `;
+                setCurrentTime();
+            } else if (page === 'setting3') {
+                connect();
+                app.innerHTML = `
+                    <div class="card">
+                        <div class="card-title"><i class="fas fa-sliders-h"></i> ควบคุมอุปกรณ์</div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
+                            <button class="action-btn btn-primary" onclick="refresh_p3()"><i class="fas fa-sync"></i> รีเฟรช</button>
+                            <button class="action-btn btn-outline-danger" onclick="reset_p3('esp32/Resetp3')"><i class="fas fa-power-off"></i> รีเซ็ต</button>
+                        </div>
+                        
+                        <label class="label-mini">โหมดการทำงาน:</label>
+                        <button class="action-btn" onclick="send_mqtt_interlock('/pro_Gram-3','1')">
+                            <i class="fas fa-robot" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Auto Program 3</span>
+                        </button>
+                        <p id="setp3" class="status-text">กำลังโหลด...</p>
+
+                        <button class="action-btn" onclick="send_mqtt_interlock('/Repeatp3','1')">
+                            <i class="fas fa-robot" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Set Repeat </span>
+                        </button>
+                        <p id="/Repeatp3_Status" class="status-text">กำลังโหลด...</p>
+
+                        <button class="action-btn" onclick="send_mqtt_interlock('/esp_c','ON')">
+                            <i class="fas fa-hand-pointer" style="font-size:20px; color:var(--primary-color)"></i>
+                            <span>Manual Control</span>
+                        </button>
+                        <p id="/Status" class="status-text">กำลังโหลด...</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title" style="color:var(--success-color)"><i class="fas fa-plus-circle"></i> ตั้งเวลาเปิด (Timer ON)</div>
+                        <div class="days-grid">
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sun','7')">อา.</button><div id="/Sun_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Mon','1')">จ.</button><div id="/Mon_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Tue','2')">อ.</button><div id="/Tue_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Wed','3')">พ.</button><div id="/Wed_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Thu','4')">พฤ.</button><div id="/Thu_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Fri','5')">ศ.</button><div id="/Fri_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sat','6')">ส.</button><div id="/Sat_on_p3" class="day-status">--</div></div>
+                        </div>
+                        <input id="settime1" type="time">
+                        <button class="action-btn btn-success" onclick="set_time('/relay2', document.getElementById('settime1').value)">
+                            <i class="fas fa-save"></i> บันทึกเวลาเปิด
+                        </button>
+                        <p id="/setok-time3" class="status-text">Waiting...</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title" style="color:var(--danger-color)"><i class="fas fa-minus-circle"></i> ตั้งเวลาปิด (Timer OFF)</div>
+                        <div class="days-grid">
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sun_Set_off','7')">อา.</button><div id="/Sun_Status_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Mon_Set_off','1')">จ.</button><div id="/Mon_Status_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Tue_Set_off','2')">อ.</button><div id="/Tue_Status_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Wed_Set_off','3')">พ.</button><div id="/Wed_Status_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Thu_Set_off','4')">พฤ.</button><div id="/Thu_Status_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Fri_Set_off','5')">ศ.</button><div id="/Fri_Status_on_p3" class="day-status">--</div></div>
+                            <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sat_Set_off','6')">ส.</button><div id="/Sat_Status_on_p3" class="day-status">--</div></div>
+                        </div>
+                        <input id="settime2" type="time">
+                        <button class="action-btn btn-danger" onclick="set_time('/relay3', document.getElementById('settime2').value)">
+                            <i class="fas fa-save"></i> บันทึกเวลาปิด
+                        </button>
+                        <p id="/setokk-time3" class="status-text">Waiting...</p>
+                    </div>
+                `;
+                setCurrentTime();
             }
         }
 
@@ -386,8 +550,19 @@
         }
 
         /* MQTT LOGIC */
-        function refresh() { setTimeout(() => { send_mqtt('/Repro1', '1'); send_mqtt('/Repro1', '0'); }, 100); }
+        function refresh() {
+            setTimeout(() => { send_mqtt('/Repro1', '1'); send_mqtt('/Repro1', '0'); }, 100);
+        }
+        function refresh_p2() {
+            setTimeout(() => { send_mqtt('/Repro2', '1'); send_mqtt('/Repro2', '0'); }, 100);
+        }
+        function refresh_p3() {
+            setTimeout(() => { send_mqtt('/Repro3', '1'); send_mqtt('/Repro3', '0'); }, 100);
+        }
         function reset(data_Reset) { if (data_Reset === 'esp32/Resetp1') { setTimeout(() => { send_mqtt('esp32/Resetp1', '1'); send_mqtt('esp32/Resetp1', '0'); }, 100); } }
+        function reset_p2(data_Reset) { if (data_Reset === 'esp32/Resetp2') { setTimeout(() => { send_mqtt('esp32/Resetp2', '1'); send_mqtt('esp32/Resetp2', '0'); }, 100); } }
+        function reset_p3(data_Reset) { if (data_Reset === 'esp32/Resetp3') { setTimeout(() => { send_mqtt('esp32/Resetp3', '1'); send_mqtt('esp32/Resetp3', '0'); }, 100); } }
+
         function set_time(topic, payl) { if (!payl) return; client.publish(topic, payl); }
         function logout() { sessionStorage.clear(); localStorage.clear(); window.location.href = "index.html"; }
 
@@ -405,7 +580,7 @@
                 const st = document.getElementById('status');
                 st.innerHTML = '<i class="fas fa-circle" style="font-size:8px"></i> MQTT: Connected';
                 st.style.color = "var(--success-color)";
-                client.subscribe('/node'); client.subscribe('set-p1-ok');
+                client.subscribe('/node'); client.subscribe('set-p1-ok'); client.subscribe('set-p2-ok'); client.subscribe('set-p3-ok');
                 client.subscribe('/Status'); client.subscribe('/Sun_on');
                 client.subscribe("/Mon_on"); client.subscribe("/Tue_on");
                 client.subscribe("/Wed_on"); client.subscribe("/Thu_on");
@@ -413,30 +588,357 @@
                 client.subscribe('/Sun_Status_on'); client.subscribe('/Mon_Status_on');
                 client.subscribe('/Tue_Status_on'); client.subscribe('/Wed_Status_on');
                 client.subscribe('/Thu_Status_on'); client.subscribe('/Fri_Status_on');
-                client.subscribe('/Sat_Status_on'); client.subscribe('/setok'); client.subscribe('/setokk');
+                client.subscribe('/Sat_Status_on');
+
+                client.subscribe('/Sun_on_p2');
+                client.subscribe('/Mon_on_p2');
+                client.subscribe('/Tue_on_p2');
+                client.subscribe('/Wed_on_p2');
+                client.subscribe('/Thu_on_p2');
+                client.subscribe('/Fri_on_p2');
+                client.subscribe('/Sat_on_p2');
+
+
+                client.subscribe('/Sun_Status_on_p2');
+                client.subscribe('/Mon_Status_on_p2');
+                client.subscribe('/Tue_Status_on_p2');
+                client.subscribe('/Wed_Status_on_p2');
+                client.subscribe('/Thu_Status_on_p2');
+                client.subscribe('/Fri_Status_on_p2');
+                client.subscribe('/Sat_Status_on_p2');
+
+
+                // ON status
+                client.subscribe('/Sun_on_p3');
+                client.subscribe('/Mon_on_p3');
+                client.subscribe('/Tue_on_p3');
+                client.subscribe('/Wed_on_p3');
+                client.subscribe('/Thu_on_p3');
+                client.subscribe('/Fri_on_p3');
+                client.subscribe('/Sat_on_p3');
+
+                // OFF status
+                client.subscribe('/Sun_Status_on_p3');
+                client.subscribe('/Mon_Status_on_p3');
+                client.subscribe('/Tue_Status_on_p3');
+                client.subscribe('/Wed_Status_on_p3');
+                client.subscribe('/Thu_Status_on_p3');
+                client.subscribe('/Fri_Status_on_p3');
+                client.subscribe('/Sat_Status_on_p3');
+
+
+
+
+
+                client.subscribe('/setok'); client.subscribe('/setokk'); client.subscribe('/setok-time2'); client.subscribe('/setokk-time2'); client.subscribe('/setok-time3'); client.subscribe('/setokk-time3');
+                client.subscribe('/Repeatp1_Status'); client.subscribe('/Repeatp2_Status'); client.subscribe('/Repeatp3_Status');
             });
 
             client.on('message', (topic, message) => {
                 let msg = message.toString();
                 if (topic === '/node') updateStatusColor('esp_online', msg === '1' ? 'ESP: Online' : 'ESP: Offline');
                 if (topic === 'set-p1-ok') { updateStatusColor('setp1', msg === '1' ? 'Status Program 1 ON' : 'Status Program 1 OFF'); a = (msg === '1') ? 1 : 0; }
+                if (topic === 'set-p2-ok') { updateStatusColor('setp2', msg === '1' ? 'Status Program 2 ON' : 'Status Program 2 OFF'); p2 = (msg === '1') ? 1 : 0; }
+                if (topic === 'set-p3-ok') { updateStatusColor('setp3', msg === '1' ? 'Status Program 2 ON' : 'Status Program 2 OFF'); p3 = (msg === '1') ? 1 : 0; }
+
                 if (topic === '/Status') { updateStatusColor('/Status', msg === '1' ? 'Status Relay ON' : 'Status Relay OFF'); b = (msg === '1') ? 1 : 0; }
                 const daysOn = { '/Sun_on': '/Sun', '/Mon_on': '/Mon', '/Tue_on': '/Tue', '/Wed_on': '/Wed', '/Thu_on': '/Thu', '/Fri_on': '/Fri', '/Sat_on': '/Sat' };
                 if (daysOn[topic]) updateStatusColor(daysOn[topic], msg === '1' ? 'ON' : 'Off');
                 const daysOff = { '/Sun_Status_on': '/Sun_off', '/Mon_Status_on': '/Mon_off', '/Tue_Status_on': '/Tue_off', '/Wed_Status_on': '/Wed_off', '/Thu_Status_on': '/Thu_off', '/Fri_Status_on': '/Fri_off', '/Sat_Status_on': '/Sat_off' };
                 if (daysOff[topic]) updateStatusColor(daysOff[topic], msg === '1' ? 'ON' : 'Off');
+
+                const daysOn_p2 = {
+                    '/Sun_on_p2': '/Sun_on_p2',
+                    '/Mon_on_p2': '/Mon_on_p2',
+                    '/Tue_on_p2': '/Tue_on_p2',
+                    '/Wed_on_p2': '/Wed_on_p2',
+                    '/Thu_on_p2': '/Thu_on_p2',
+                    '/Fri_on_p2': '/Fri_on_p2',
+                    '/Sat_on_p2': '/Sat_on_p2'
+                };
+
+
+                if (daysOn_p2[topic]) {
+                    updateStatusColor(daysOn_p2[topic], msg === '1' ? 'ON' : 'Off');
+                }
+
+
+                const daysOff_p2 = {
+                    '/Sun_Status_on_p2': '/Sun_Status_on_p2',
+                    '/Mon_Status_on_p2': '/Mon_Status_on_p2',
+                    '/Tue_Status_on_p2': '/Tue_Status_on_p2',
+                    '/Wed_Status_on_p2': '/Wed_Status_on_p2',
+                    '/Thu_Status_on_p2': '/Thu_Status_on_p2',
+                    '/Fri_Status_on_p2': '/Fri_Status_on_p2',
+                    '/Sat_Status_on_p2': '/Sat_Status_on_p2'
+                };
+
+
+                if (daysOff_p2[topic]) {
+                    updateStatusColor(daysOff_p2[topic], msg === '1' ? 'ON' : 'Off');
+                }
+
+
+
+
+
+
+                const daysOn_p3 = {
+                    '/Sun_on_p3': '/Sun_on_p3',
+                    '/Mon_on_p3': '/Mon_on_p3',
+                    '/Tue_on_p3': '/Tue_on_p3',
+                    '/Wed_on_p3': '/Wed_on_p3',
+                    '/Thu_on_p3': '/Thu_on_p3',
+                    '/Fri_on_p3': '/Fri_on_p3',
+                    '/Sat_on_p3': '/Sat_on_p3'
+                };
+
+                if (daysOn_p3[topic]) {
+                    updateStatusColor(daysOn_p3[topic], msg === '1' ? 'ON' : 'Off');
+                }
+
+
+                const daysOff_p3 = {
+                    '/Sun_Status_on_p3': '/Sun_Status_on_p3',
+                    '/Mon_Status_on_p3': '/Mon_Status_on_p3',
+                    '/Tue_Status_on_p3': '/Tue_Status_on_p3',
+                    '/Wed_Status_on_p3': '/Wed_Status_on_p3',
+                    '/Thu_Status_on_p3': '/Thu_Status_on_p3',
+                    '/Fri_Status_on_p3': '/Fri_Status_on_p3',
+                    '/Sat_Status_on_p3': '/Sat_Status_on_p3'
+                };
+
+                if (daysOff_p3[topic]) {
+                    updateStatusColor(daysOff_p3[topic], msg === '1' ? 'ON' : 'Off');
+                }
+
+
+
+
+
+
+
                 if (topic === '/setok') updateStatusColor('/setok', msg === '1' ? 'Time Set ON' : 'Loading');
                 if (topic === '/setokk') updateStatusColor('/setokk', msg === '1' ? 'Time Set ON' : 'Loading');
+                if (topic === '/setok-time2') updateStatusColor('/setok-time2', msg === '1' ? 'Time Set ON' : 'Loading');
+                if (topic === '/setokk-time2') updateStatusColor('/setokk-time2', msg === '1' ? 'Time Set ON' : 'Loading');
+                if (topic === '/setok-time3') updateStatusColor('/setok-time3', msg === '1' ? 'Time Set ON' : 'Loading');
+                if (topic === '/setokk-time3') updateStatusColor('/setokk-time3', msg === '1' ? 'Time Set ON' : 'Loading');
+                if (topic === '/Repeatp1_Status') { updateStatusColor('/Repeatp1_Status', msg === '1' ? 'Set Repeat ON' : 'Set Repeat OFF'); c = (msg === '1') ? 1 : 0; }
+                if (topic === '/Repeatp2_Status') { updateStatusColor('/Repeatp2_Status', msg === '1' ? 'Set Repeat ON' : 'Set Repeat OFF'); repeatp2 = (msg === '1') ? 1 : 0; }
+                if (topic === '/Repeatp3_Status') { updateStatusColor('/Repeatp3_Status', msg === '1' ? 'Set Repeat ON' : 'Set Repeat OFF'); repeatp3 = (msg === '1') ? 1 : 0; }
+
+
+                if (topic === '/Sun_on') {
+                    Sun = (msg === '1') ? 7 : 0;
+                }
+
+                if (topic === '/Mon_on') {
+                    Mon = (msg === '1') ? 1 : 0;
+                }
+
+                if (topic === '/Tue_on') {
+                    Tue = (msg === '1') ? 2 : 0;
+                }
+
+                if (topic === '/Wed_on') {
+                    Wed = (msg === '1') ? 3 : 0;
+                }
+
+                if (topic === '/Thu_on') {
+                    Thu = (msg === '1') ? 4 : 0;
+                }
+
+                if (topic === '/Fri_on') {
+                    Fri = (msg === '1') ? 5 : 0;
+                }
+
+                if (topic === '/Sat_on') {
+                    Sat = (msg === '1') ? 6 : 0;
+                }
+
+                if (topic === '/Sun_Status_on') {
+                    Sun_off = (msg === '1') ? 7 : 0;
+                }
+
+                if (topic === '/Mon_Status_on') {
+                    Mon_off = (msg === '1') ? 1 : 0;
+                }
+
+                if (topic === '/Tue_Status_on') {
+                    Tue_off = (msg === '1') ? 2 : 0;
+                }
+
+                if (topic === '/Wed_Status_on') {
+                    Wed_off = (msg === '1') ? 3 : 0;
+                }
+
+                if (topic === '/Thu_Status_on') {
+                    Thu_off = (msg === '1') ? 4 : 0;
+                }
+
+                if (topic === '/Fri_Status_on') {
+                    Fri_off = (msg === '1') ? 5 : 0;
+                }
+
+                if (topic === '/Sat_Status_on') {
+                    Sat_off = (msg === '1') ? 6 : 0;
+                }
+
+
+
+
+
+
+                if (topic === '/Sun_on_p2') {
+                    Sun = (msg === '1') ? 7 : 0;
+                }
+
+                if (topic === '/Mon_on_p2') {
+                    Mon = (msg === '1') ? 1 : 0;
+                }
+
+                if (topic === '/Tue_on_p2') {
+                    Tue = (msg === '1') ? 2 : 0;
+                }
+
+                if (topic === '/Wed_on_p2') {
+                    Wed = (msg === '1') ? 3 : 0;
+                }
+
+                if (topic === '/Thu_on_p2') {
+                    Thu = (msg === '1') ? 4 : 0;
+                }
+
+                if (topic === '/Fri_on_p2') {
+                    Fri = (msg === '1') ? 5 : 0;
+                }
+
+                if (topic === '/Sat_on_p2') {
+                    Sat = (msg === '1') ? 6 : 0;
+                }
+
+
+
+
+
+                if (topic === '/Sun_Status_on_p2') {
+                    Sun_off = (msg === '1') ? 7 : 0;
+                }
+
+                if (topic === '/Mon_Status_on_p2') {
+                    Mon_off = (msg === '1') ? 1 : 0;
+                }
+
+                if (topic === '/Tue_Status_on_p2') {
+                    Tue_off = (msg === '1') ? 2 : 0;
+                }
+
+                if (topic === '/Wed_Status_on_p2') {
+                    Wed_off = (msg === '1') ? 3 : 0;
+                }
+
+                if (topic === '/Thu_Status_on_p2') {
+                    Thu_off = (msg === '1') ? 4 : 0;
+                }
+
+                if (topic === '/Fri_Status_on_p2') {
+                    Fri_off = (msg === '1') ? 5 : 0;
+                }
+
+                if (topic === '/Sat_Status_on_p2') {
+                    Sat_off = (msg === '1') ? 6 : 0;
+                }
+
+
+
+
+                if (topic === '/Sun_on_p3') {
+                    Sun = (msg === '1') ? 7 : 0;
+                }
+
+                if (topic === '/Mon_on_p3') {
+                    Mon = (msg === '1') ? 1 : 0;
+                }
+
+                if (topic === '/Tue_on_p3') {
+                    Tue = (msg === '1') ? 2 : 0;
+                }
+
+                if (topic === '/Wed_on_p3') {
+                    Wed = (msg === '1') ? 3 : 0;
+                }
+
+                if (topic === '/Thu_on_p3') {
+                    Thu = (msg === '1') ? 4 : 0;
+                }
+
+                if (topic === '/Fri_on_p3') {
+                    Fri = (msg === '1') ? 5 : 0;
+                }
+
+                if (topic === '/Sat_on_p3') {
+                    Sat = (msg === '1') ? 6 : 0;
+
+
+
+
+                }
+
+
+
+
+
+                if (topic === '/Sun_Status_on_p3') {
+                    Sun_off = (msg === '1') ? 7 : 0;
+                }
+
+                if (topic === '/Mon_Status_on_p3') {
+                    Mon_off = (msg === '1') ? 1 : 0;
+                }
+
+                if (topic === '/Tue_Status_on_p3') {
+                    Tue_off = (msg === '1') ? 2 : 0;
+                }
+
+                if (topic === '/Wed_Status_on_p3') {
+                    Wed_off = (msg === '1') ? 3 : 0;
+                }
+
+                if (topic === '/Thu_Status_on_p3') {
+                    Thu_off = (msg === '1') ? 4 : 0;
+                }
+
+                if (topic === '/Fri_Status_on_p3') {
+                    Fri_off = (msg === '1') ? 5 : 0;
+                }
+
+                if (topic === '/Sat_Status_on_p3') {
+                    Sat_off = (msg === '1') ? 6 : 0;
+                }
+
+
+
+
+
             });
         }
         function send_mqtt(topic, mass) { client.publish(topic, mass); }
-        var a = null, b = null, Sun = 0, Mon = 0, Tue = 0, Wed = 0, Thu = 0, Fri = 0, Sat = 0;
+        var a = null, b = null, c = null, p2 = null, p3 = null, Sun = 0, Mon = 0, Tue = 0, Wed = 0, Thu = 0, Fri = 0, Sat = 0;
         var Sun_off = 0, Mon_off = 0, Tue_off = 0, Wed_off = 0, Thu_off = 0, Fri_off = 0, Sat_off = 0;
 
         function send_mqtt_interlock(send_mqtt1, mass1) {
             if (send_mqtt1 === '/pro_Gram-1') {
                 if (mass1 === '1' && a === 0) { a = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
                 if (mass1 === '1' && a === 1) { mass1 = '0'; a = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
+            }
+            if (send_mqtt1 === '/pro_Gram-2') {
+                if (mass1 === '1' && p2 === 0) { p2 = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
+                if (mass1 === '1' && p2 === 1) { mass1 = '0'; p2 = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
+            }
+            if (send_mqtt1 === '/pro_Gram-3') {
+                if (mass1 === '1' && p3 === 0) { p3 = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
+                if (mass1 === '1' && p3 === 1) { mass1 = '0'; p3 = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
             }
             if (send_mqtt1 === '/esp_c') {
                 if (mass1 === 'ON' && b === 0) { b = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
@@ -456,6 +958,19 @@
             if (send_mqtt1 === '/Thu_Set_off') { if (mass1 === '4' && Thu_off === 0) { Thu_off = 4; return client.publish(send_mqtt1, mass1, { retain: true }); } if (mass1 === '4' && Thu_off === 4) { mass1 = '0'; Thu_off = 0; return client.publish(send_mqtt1, mass1, { retain: true }); } }
             if (send_mqtt1 === '/Fri_Set_off') { if (mass1 === '5' && Fri_off === 0) { Fri_off = 5; return client.publish(send_mqtt1, mass1, { retain: true }); } if (mass1 === '5' && Fri_off === 5) { mass1 = '0'; Fri_off = 0; return client.publish(send_mqtt1, mass1, { retain: true }); } }
             if (send_mqtt1 === '/Sat_Set_off') { if (mass1 === '6' && Sat_off === 0) { Sat_off = 6; return client.publish(send_mqtt1, mass1, { retain: true }); } if (mass1 === '6' && Sat_off === 6) { mass1 = '0'; Sat_off = 0; return client.publish(send_mqtt1, mass1, { retain: true }); } }
+
+            if (send_mqtt1 === '/Repeatp1') {
+                if (mass1 === '1' && c === 0) { c = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
+                if (mass1 === '1' && c === 1) { mass1 = '0'; c = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
+            }
+            if (send_mqtt1 === '/Repeatp2') {
+                if (mass1 === '1' && repeatp2 === 0) { repeatp2 = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
+                if (mass1 === '1' && repeatp2 === 1) { mass1 = '0'; repeatp2 = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
+            }
+            if (send_mqtt1 === '/Repeatp3') {
+                if (mass1 === '1' && repeatp3 === 0) { repeatp3 = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
+                if (mass1 === '1' && repeatp3 === 1) { mass1 = '0'; repeatp3 = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
+            }
         }
     </script>
 </head>
