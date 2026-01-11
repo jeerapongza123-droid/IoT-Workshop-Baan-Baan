@@ -208,7 +208,7 @@
             const userId = document.getElementById("userId").value;
             const pass = document.getElementById("pass").value;
 
-            fetch('https://node-server-p56n.onrender.com/login', {
+            fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, pass })
@@ -232,6 +232,38 @@
                     icon.className = 'fas fa-arrow-right';
                     btn.disabled = false;
                 });
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        function login() {
+            const btn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('loginText');
+            const icon = document.getElementById('loginIcon');
+
+            // เปลี่ยนข้อความและเพิ่ม class spin ให้ไอคอน
+            btnText.innerText = 'กำลังเชื่อมต่อ...';
+            icon.className = 'fas fa-spinner spin'; // ใช้ไอคอน spinner
+            btn.disabled = true;
+
+            const userId = document.getElementById("userId").value;
+            const pass = document.getElementById("pass").value;
+
+            setTimeout(() => {
+                if (userId === "admin" && pass === "123") {
+                    sessionStorage.setItem("isLoggedIn", "true");
+                    window.location.href = "home.html";
+                } else {
+                    alert("รหัสผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!");
+                }
+
+                // reset ปุ่ม
+                btnText.innerText = 'เข้าสู่ระบบ';
+                icon.className = 'fas fa-arrow-right';
+                btn.disabled = false;
+            }, 1000);
         }
     </script>
 
@@ -263,7 +295,7 @@
             <input id="pass" type="password" placeholder="กรอกรหัสผ่าน">
         </div>
 
-        <button type="button" id="loginBtn" onclick="loginWithLoading()">
+        <button type="button" id="loginBtn" onclick="login()">
             <span id="loginText">เข้าสู่ระบบ</span>
             <i id="loginIcon" class="fas fa-arrow-right"></i>
         </button>
