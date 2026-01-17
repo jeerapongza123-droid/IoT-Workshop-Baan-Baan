@@ -10,6 +10,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        .th-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .th-box {
+            background: rgba(78, 115, 223, 0.08);
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .th-box i {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .th-box.temp i {
+            color: var(--danger-color);
+        }
+
+        .th-box.humi i {
+            color: var(--primary-color);
+        }
+
+        .th-label {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 6px 0;
+        }
+
+        .th-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+
         :root {
             --primary-color: #4e73df;
             --success-color: #1cc88a;
@@ -257,6 +297,50 @@
             display: block;
             padding-left: 5px;
         }
+
+        .control-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 300px;
+            /* ระยะห่างปุ่มกับข้อความ */
+        }
+
+        .action-btn.tiny {
+            padding: 36px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--primary-color);
+            background-color: white;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .action-btn.tiny:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .action-btn.tiny i {
+            font-size: 26px;
+        }
+
+        .status-text1 {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 12px;
+            border: 1px solid #f44336;
+            background-color: #ffeaea;
+            color: #f44336;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            user-select: none;
+        }
     </style>
 
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -321,6 +405,23 @@
                             </div>
                             <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
                         </button>
+                    </div>
+
+
+                          <div class="card">
+                        <div class="card-title"><i class="fas fa-th-large"></i> ระบบตรวจวัดอุณหภูมิและความชื้น พร้อมควบคุมรีเลย์</div>
+                        <button class="action-btn" onclick="go('temp&humi')">
+                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                            </div>
+                            <div style="text-align:left; flex-grow:1;">
+                                <span style="display:block; font-size:15px;">ตรวจสอบอุณหภูมิ ความชื้น และการทำงานของรีเลย์</span>
+                                <small style="color:var(--text-muted); font-weight:400;">ตั้งค่าการแจ้งเตือน Temp&Humi พร้อมควบคุมรีเลย์</small>
+                            </div>
+                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+                        </button>
+
+                     
                     </div>
 
                     
@@ -526,7 +627,242 @@
                     </div>
                 `;
                 setCurrentTime();
+            } else if (page === 'temp&humi') {
+                connect();
+                app.innerHTML = `
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-thermometer-half"></i> อุณหภูมิ & ความชื้น
+            </div>
+
+            <div class="th-grid">
+                <div class="th-box temp">
+                    <i class="fas fa-temperature-high"></i>
+                    <p class="th-label">อุณหภูมิปัจจุบัน</p>
+                    <p id="tempjee" class="th-value">-- °C</p>
+                </div>
+
+                <div class="th-box humi">
+                    <i class="fas fa-tint"></i>
+                    <p class="th-label">ความชื้นปัจจุบัน</p>
+                    <p id="humijee" class="th-value">-- %</p>
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="card">
+            <div class="card-title" style="color:var(--primary-color);">
+                <i class="fas fa-sliders-h"></i> ควบคุมและตั้งค่า
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                <button class="action-btn btn-primary" onclick="reset_temp_Humi('/Reset_T_H')">
+                    <i class="fas fa-sync"></i> รีเซ็ต Temp & Humi
+                </button>
+                <button class="action-btn btn-outline-danger" onclick="send_mqtt_interlock('/esp_c','ON')">
+                    <i class="fas fa-hand-pointer"></i> Manual Control
+                </button>
+            </div>
+
+            <p id="/Status" class="status-text" style="margin-bottom:24px;">กำลังโหลด...</p>
+
+            <!-- ตั้งค่าต่าง ๆ แบบเป็นระเบียบ -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <button class="action-btn" onclick="send_mqtt_interlock('set_teMP','1')">
+                    <i class="fas fa-thermometer-full" style="color:var(--primary-color);"></i>
+                    <span>เปิด/ปิด การควบคุม Temp</span>
+                </button>
+                <p id="/Status_set_teMp" class="status-text">----------</p>
+
+                <button class="action-btn" onclick="send_mqtt_interlock('set_HuMi','1')">
+                    <i class="fas fa-tint" style="color:var(--primary-color);"></i>
+                    <span>เปิด/ปิด การควบคุม Humi</span>
+                </button>
+                <p id="/Status_set_HuMi" class="status-text">----------</p>
+
+                <button class="action-btn btn-danger" onclick="send_mqtt_interlock('set_teMP_Low','1')">
+                    <i class="fas fa-temperature-low"></i>
+                    <span>ตั้งค่า Temp Low Limit</span>
+                </button>
+                <p id="/Status_set_teMp_Low" class="status-text">----------</p>
+
+                <button class="action-btn btn-danger" onclick="send_mqtt_interlock('set_teMP_High','1')">
+                    <i class="fas fa-temperature-high"></i>
+                    <span>ตั้งค่า Temp High Limit</span>
+                </button>
+                <p id="/Status_set_teMp_High" class="status-text">----------</p>
+
+                <button class="action-btn btn-primary" onclick="send_mqtt_interlock('set_HuMi_Low','1')">
+                    <i class="fas fa-tint-slash"></i>
+                    <span>ตั้งค่า Humi Low Limit</span>
+                </button>
+                <p id="/Status_set_HuMi_Low" class="status-text">----------</p>
+
+                <button class="action-btn btn-primary" onclick="send_mqtt_interlock('set_HuMi_High','1')">
+                    <i class="fas fa-tint"></i>
+                    <span>ตั้งค่า Humi High Limit</span>
+                </button>
+                <p id="/Status_set_HuMi_High" class="status-text">----------</p>
+            </div>
+        </div>
+
+         <button class="action-btn" onclick="go('Set_value')">
+                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                            </div>
+                            <div style="text-align:left; flex-grow:1;">
+                                <span style="display:block; font-size:15px;">ตั้งค่าการเปิด-ปิดรีเลย์ตามอุณหภูมิ&ความชื้น </span>
+                                <small style="color:var(--text-muted); font-weight:400;">จัดการรีเลย์เปิด-ปิดอัตโนมัติ</small>
+                            </div>
+                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+                        </button>
+    `;
+            } else if (page === 'Set_value') {
+                connect();
+                app.innerHTML = `
+                   <div class="card">
+                        <div class="card-title"><i class="fas fa-th-large"></i> ระบบตรวจวัดอุณหภูมิและความชื้น พร้อมควบคุมรีเลย์</div>
+                        <button class="action-btn" onclick="go('temp&humi')">
+                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                            </div>
+                            <div style="text-align:left; flex-grow:1;">
+                                <span style="display:block; font-size:15px;">ตรวจสอบอุณหภูมิ ความชื้น และการทำงานของรีเลย์</span>
+                                <small style="color:var(--text-muted); font-weight:400;">ตั้งค่าการแจ้งเตือน Temp&Humi พร้อมควบคุมรีเลย์</small>
+                            </div>
+                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+                        </button>
+
+                     
+                    </div>
+
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-cog"></i> ตั้งค่าช่วงอุณหภูมิ & ความชื้น
+            </div>
+
+            <!-- แสดงค่าที่ตั้งไว้ปัจจุบัน -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                <div class="th-box temp">
+                    <i class="fas fa-temperature-high"></i>
+                    <p class="th-label">Temp High Limit</p>
+                    <p id="/set_temp_high_value" class="th-value">-- °C</p>
+                </div>
+                <div class="th-box temp">
+                    <i class="fas fa-temperature-low"></i>
+                    <p class="th-label">Temp Low Limit</p>
+                    <p id="/set_temp_low_value" class="th-value">-- °C</p>
+                </div>
+                <div class="th-box humi">
+                    <i class="fas fa-tint"></i>
+                    <p class="th-label">Humi High Limit</p>
+                    <p id="/set_humi_high_value" class="th-value">-- %</p>
+                </div>
+                <div class="th-box humi">
+                    <i class="fas fa-tint-slash"></i>
+                    <p class="th-label">Humi Low Limit</p>
+                    <p id="/set_humi_low_value" class="th-value">-- %</p>
+                </div>
+            </div>
+
+           
+        </div>
+
+        <div class="card">
+            <div class="card-title" style="color: var(--primary-color);">
+                <i class="fas fa-edit"></i> ปรับตั้งค่าใหม่
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Temp High -->
+                <div>
+                    <label class="label-mini">อุณหภูมิสูงสุด (High Limit)</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="number" id="high_temp" placeholder="เช่น 35.43 , 23" style="
+                            flex: 1;
+                            padding: 14px;
+                            font-size: 18px;
+                            border: 2px solid #edf2f7;
+                            border-radius: var(--radius-md);
+                            text-align: center;
+                            background: #f8f9fc;
+                        ">
+                        <button class="action-btn btn-danger" onclick="send_mqtt('/set_temp_high', document.getElementById('high_temp').value)">
+                            <i class="fas fa-save"></i> บันทึก
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Temp Low -->
+                <div>
+                    <label class="label-mini">อุณหภูมิต่ำสุด (Low Limit)</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="number" id="low_temp" placeholder="เช่น 18.4, 12 " style="
+                            flex: 1;
+                            padding: 14px;
+                            font-size: 18px;
+                            border: 2px solid #edf2f7;
+                            border-radius: var(--radius-md);
+                            text-align: center;
+                            background: #f8f9fc;
+                        ">
+                        <button class="action-btn btn-danger" onclick="send_mqtt('/set_temp_low', document.getElementById('low_temp').value)">
+                            <i class="fas fa-save"></i> บันทึก
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Humi High -->
+                <div>
+                    <label class="label-mini">ความชื้นสูงสุด (High Limit)</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="number" id="high_humi" placeholder="เช่น 85.2,92" style="
+                            flex: 1;
+                            padding: 14px;
+                            font-size: 18px;
+                            border: 2px solid #edf2f7;
+                            border-radius: var(--radius-md);
+                            text-align: center;
+                            background: #f8f9fc;
+                        ">
+                        <button class="action-btn btn-primary" onclick="send_mqtt('/set_humi_high', document.getElementById('high_humi').value)">
+                            <i class="fas fa-save"></i> บันทึก
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Humi Low -->
+                <div>
+                    <label class="label-mini">ความชื้นต่ำสุด (Low Limit)</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <input type="number" id="low_humi" placeholder="เช่น 40.1 ,42" style="
+                            flex: 1;
+                            padding: 14px;
+                            font-size: 18px;
+                            border: 2px solid #edf2f7;
+                            border-radius: var(--radius-md);
+                            text-align: center;
+                            background: #f8f9fc;
+                        ">
+                        <button class="action-btn btn-primary" onclick="send_mqtt('/set_humi_low', document.getElementById('low_humi').value)">
+                            <i class="fas fa-save"></i> บันทึก
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">
+                กรุณาใส่ค่าตัวเลขเท่านั้น (เช่น 30.1, 30 ,28 ) และกดบันทึก
+            </div>
+        </div>
+    `;
             }
+
+
+
         }
 
         function updateStatusColor(id, text) {
@@ -535,11 +871,11 @@
             el.innerText = text;
 
             // Logic เปลี่ยนสี เขียว-แดง
-            if (text.includes("ON") || text.includes("Online") || text.includes("Set ON")) {
+            if (text.includes("ON") || text.includes("Online") || text.includes("Set ON") || text.includes("OPEN")) {
                 el.style.color = "var(--success-color)";
                 el.style.borderColor = "var(--success-color)";
                 el.style.background = "rgba(28, 200, 138, 0.05)";
-            } else if (text.includes("Off") || text.includes("OFF") || text.includes("Offline")) {
+            } else if (text.includes("Off") || text.includes("OFF") || text.includes("Offline") || text.includes("CLOSE")) {
                 el.style.color = "var(--danger-color)";
                 el.style.borderColor = "var(--danger-color)";
                 el.style.background = "rgba(231, 74, 59, 0.05)";
@@ -547,6 +883,9 @@
                 el.style.color = "var(--text-muted)";
                 el.style.background = "#f8f9fc";
             }
+
+
+
         }
 
         /* MQTT LOGIC */
@@ -562,6 +901,9 @@
         function reset(data_Reset) { if (data_Reset === 'esp32/Resetp1') { setTimeout(() => { send_mqtt('esp32/Resetp1', '1'); send_mqtt('esp32/Resetp1', '0'); }, 100); } }
         function reset_p2(data_Reset) { if (data_Reset === 'esp32/Resetp2') { setTimeout(() => { send_mqtt('esp32/Resetp2', '1'); send_mqtt('esp32/Resetp2', '0'); }, 100); } }
         function reset_p3(data_Reset) { if (data_Reset === 'esp32/Resetp3') { setTimeout(() => { send_mqtt('esp32/Resetp3', '1'); send_mqtt('esp32/Resetp3', '0'); }, 100); } }
+
+        function reset_temp_Humi(data_Reset) { if (data_Reset === '/Reset_T_H') { setTimeout(() => { send_mqtt('/Reset_T_H', '1'); send_mqtt('/Reset_T_H', '0'); }, 100); } }
+
 
         function set_time(topic, payl) { if (!payl) return; client.publish(topic, payl); }
         function logout() { sessionStorage.clear(); localStorage.clear(); window.location.href = "index.html"; }
@@ -632,6 +974,21 @@
 
                 client.subscribe('/setok'); client.subscribe('/setokk'); client.subscribe('/setok-time2'); client.subscribe('/setokk-time2'); client.subscribe('/setok-time3'); client.subscribe('/setokk-time3');
                 client.subscribe('/Repeatp1_Status'); client.subscribe('/Repeatp2_Status'); client.subscribe('/Repeatp3_Status');
+
+
+                client.subscribe('tempjee'); client.subscribe('humijee');
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                client.subscribe('/set_temp_high_value'); client.subscribe('/set_temp_low_value');
+                client.subscribe('/set_humi_high_value'); client.subscribe('/set_humi_low_value');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                client.subscribe('/Status_set_teMp'); client.subscribe('/Status_set_HuMi');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                client.subscribe('/Status_set_teMp_Low'); client.subscribe('/Status_set_HuMi_Low');
+                client.subscribe('/Status_set_teMp_High'); client.subscribe('/Status_set_HuMi_High');
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             });
 
             client.on('message', (topic, message) => {
@@ -639,13 +996,74 @@
                 if (topic === '/node') updateStatusColor('esp_online', msg === '1' ? 'ESP: Online' : 'ESP: Offline');
                 if (topic === 'set-p1-ok') { updateStatusColor('setp1', msg === '1' ? 'Status Program 1 ON' : 'Status Program 1 OFF'); a = (msg === '1') ? 1 : 0; }
                 if (topic === 'set-p2-ok') { updateStatusColor('setp2', msg === '1' ? 'Status Program 2 ON' : 'Status Program 2 OFF'); p2 = (msg === '1') ? 1 : 0; }
-                if (topic === 'set-p3-ok') { updateStatusColor('setp3', msg === '1' ? 'Status Program 2 ON' : 'Status Program 2 OFF'); p3 = (msg === '1') ? 1 : 0; }
+                if (topic === 'set-p3-ok') { updateStatusColor('setp3', msg === '1' ? 'Status Program 3 ON' : 'Status Program 3 OFF'); p3 = (msg === '1') ? 1 : 0; }
 
                 if (topic === '/Status') { updateStatusColor('/Status', msg === '1' ? 'Status Relay ON' : 'Status Relay OFF'); b = (msg === '1') ? 1 : 0; }
                 const daysOn = { '/Sun_on': '/Sun', '/Mon_on': '/Mon', '/Tue_on': '/Tue', '/Wed_on': '/Wed', '/Thu_on': '/Thu', '/Fri_on': '/Fri', '/Sat_on': '/Sat' };
                 if (daysOn[topic]) updateStatusColor(daysOn[topic], msg === '1' ? 'ON' : 'Off');
                 const daysOff = { '/Sun_Status_on': '/Sun_off', '/Mon_Status_on': '/Mon_off', '/Tue_Status_on': '/Tue_off', '/Wed_Status_on': '/Wed_off', '/Thu_Status_on': '/Thu_off', '/Fri_Status_on': '/Fri_off', '/Sat_Status_on': '/Sat_off' };
                 if (daysOff[topic]) updateStatusColor(daysOff[topic], msg === '1' ? 'ON' : 'Off');
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/Status_set_teMp') { updateStatusColor('/Status_set_teMp', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_set_teMp = (msg === '1') ? 1 : 0; }
+                if (topic === '/Status_set_HuMi') { updateStatusColor('/Status_set_HuMi', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_set_HuMi = (msg === '1') ? 1 : 0; }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (topic === '/Status_set_teMp_Low') { updateStatusColor('/Status_set_teMp_Low', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_set_teMp_Low = (msg === '1') ? 1 : 0; }
+                if (topic === '/Status_set_HuMi_Low') { updateStatusColor('/Status_set_HuMi_Low', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_set_HuMi_Low = (msg === '1') ? 1 : 0; }
+
+                if (topic === '/Status_set_teMp_High') { updateStatusColor('/Status_set_teMp_High', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_set_teMp_High = (msg === '1') ? 1 : 0; }
+                if (topic === '/Status_set_HuMi_High') { updateStatusColor('/Status_set_HuMi_High', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_set_HuMi_High = (msg === '1') ? 1 : 0; }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/set_temp_high_value') {
+                    const tt = document.getElementById('/set_temp_high_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " °C";
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/set_humi_high_value') {
+                    const tt = document.getElementById('/set_humi_high_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " %";
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/set_temp_low_value') {
+                    const tt = document.getElementById('/set_temp_low_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " °C";
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/set_humi_low_value') {
+                    const tt = document.getElementById('/set_humi_low_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " %";
+                }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === 'tempjee') {
+                    const tt = document.getElementById('tempjee');
+                    if (!tt) return;
+
+                    tt.innerText = msg + " °C";
+
+                }
+
+                if (topic === 'humijee') {
+                    const tt = document.getElementById('humijee');
+                    if (!tt) return;
+
+                    tt.innerText = msg + " %";
+
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
                 const daysOn_p2 = {
                     '/Sun_on_p2': '/Sun_on_p2',
@@ -926,6 +1344,7 @@
         function send_mqtt(topic, mass) { client.publish(topic, mass); }
         var a = null, b = null, c = null, p2 = null, p3 = null, Sun = 0, Mon = 0, Tue = 0, Wed = 0, Thu = 0, Fri = 0, Sat = 0;
         var Sun_off = 0, Mon_off = 0, Tue_off = 0, Wed_off = 0, Thu_off = 0, Fri_off = 0, Sat_off = 0;
+        var Status_set_teMp, Status_set_HuMi, Status_set_teMp_Low, Status_set_HuMi_Low, Status_set_teMp_High, Status_set_HuMi_High;
 
         function send_mqtt_interlock(send_mqtt1, mass1) {
             if (send_mqtt1 === '/pro_Gram-1') {
@@ -971,6 +1390,125 @@
                 if (mass1 === '1' && repeatp3 === 0) { repeatp3 = 1; return client.publish(send_mqtt1, mass1, { retain: true }); }
                 if (mass1 === '1' && repeatp3 === 1) { mass1 = '0'; repeatp3 = 0; return client.publish(send_mqtt1, mass1, { retain: true }); }
             }
+
+            if (send_mqtt1 === 'set_teMP') {
+                if (mass1 === '1' && Status_set_teMp === 0) {
+
+                    Status_set_teMp = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true });
+
+                }
+
+                if (mass1 === '1' && Status_set_teMp === 1) {
+
+                    mass1 = '0';
+                    Status_set_teMp = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true });
+
+                }
+
+            }
+
+
+            if (send_mqtt1 === 'set_HuMi') {
+                if (mass1 === '1' && Status_set_HuMi === 0) {
+                    Status_set_HuMi = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_set_HuMi === 1) {
+                    mass1 = '0';
+                    Status_set_HuMi = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+            if (send_mqtt1 === 'set_HuMi') {
+                if (mass1 === '1' && Status_set_HuMi === 0) {
+                    Status_set_HuMi = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_set_HuMi === 1) {
+                    mass1 === '0';
+                    Status_set_HuMi = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+            if (send_mqtt1 === 'set_teMP_Low') {
+                if (mass1 === '1' && Status_set_teMp_Low === 0) {
+                    Status_set_teMp_Low = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_set_teMp_Low === 1) {
+                    mass1 = '0';
+                    Status_set_teMp_Low = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+
+
+            if (send_mqtt1 === 'set_HuMi_Low') {
+                if (mass1 === '1' && Status_set_HuMi_Low === 0) {
+                    Status_set_HuMi_Low = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_set_HuMi_Low === 1) {
+                    mass1 = '0';
+                    Status_set_HuMi_Low = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+            if (send_mqtt1 === 'set_teMP_High') {
+                if (mass1 === '1' && Status_set_teMp_High === 0) {
+                    Status_set_teMp_High = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_set_teMp_High === 1) {
+                    mass1 = '0';
+                    Status_set_teMp_High = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+            if (send_mqtt1 === 'set_HuMi_High') {
+                if (mass1 === '1' && Status_set_HuMi_High === 0) {
+                    Status_set_HuMi_High = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_set_HuMi_High === 1) {
+                    mass1 = '0';
+                    Status_set_HuMi_High = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+
         }
     </script>
 </head>
