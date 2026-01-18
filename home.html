@@ -1126,8 +1126,12 @@
             client = mqtt.connect(brokerUrl, options);
             client.on('connect', () => {
                 const st = document.getElementById('status');
-                st.innerHTML = '<i class="fas fa-circle" style="font-size:8px"></i> MQTT: Connected';
-                st.style.color = "var(--success-color)";
+                if (st) {
+                    st.innerHTML = '<i class="fas fa-link" style="color:var(--success-color); font-size:14px; margin-right:8px;"></i> MQTT: Connected';
+                    st.style.color = "var(--success-color)";
+                }
+
+
                 client.subscribe('/node'); client.subscribe('set-p1-ok'); client.subscribe('set-p2-ok'); client.subscribe('set-p3-ok');
                 client.subscribe('/Status'); client.subscribe('/Sun_on');
                 client.subscribe("/Mon_on"); client.subscribe("/Tue_on");
@@ -1225,6 +1229,14 @@
 
             });
 
+            client.on('close', () => {
+                const st = document.getElementById('status');
+                if (st) {
+                    st.innerHTML = '<i class="fas fa-unlink" style="color:var(--danger-color); font-size:14px; margin-right:8px;"></i> MQTT: Disconnected';
+                    st.style.color = "var(--danger-color)";
+                }
+            });
+
             client.on('message', (topic, message) => {
                 let msg = message.toString();
 
@@ -1270,7 +1282,7 @@
                 if (topic === '/WiFi_RSSI') {
                     const tt = document.getElementById('/WiFi_RSSI')
                     if (!tt) return;
-                    tt.innerText = msg + " RSSI";
+                    tt.innerText = msg + " dBm";
                 }
 
                 if (topic === '/WiFi_Signal_Quality') {
@@ -1330,7 +1342,23 @@
 
 
 
-                if (topic === '/node') updateStatusColor('esp_online', msg === '1' ? 'ESP: Online' : 'ESP: Offline');
+                if (topic === '/node') {
+                    const espBadge = document.getElementById('esp_online');
+                    if (espBadge) {
+                        const isOnline = (msg === '1');
+
+                        if (isOnline) {
+                            // ตอนออนไลน์ → ใช้ไอคอนชิปสีเขียว
+                            espBadge.innerHTML = '<i class="fas fa-microchip" style="color:var(--success-color); font-size:14px; margin-right:8px;"></i> ESP: Online';
+                            espBadge.style.color = "var(--success-color)";
+                        } else {
+                            // ตอนออฟไลน์ → ใช้วงกลมแดง (เหมือนเดิม)
+                            espBadge.innerHTML = '<i class="fas fa-circle" style="color:var(--danger-color); font-size:8px; margin-right:8px;"></i> ESP: Offline';
+                            espBadge.style.color = "var(--danger-color)";
+                        }
+                    }
+                }
+
                 if (topic === 'set-p1-ok') { updateStatusColor('setp1', msg === '1' ? 'Status Program 1 ON' : 'Status Program 1 OFF'); a = (msg === '1') ? 1 : 0; }
                 if (topic === 'set-p2-ok') { updateStatusColor('setp2', msg === '1' ? 'Status Program 2 ON' : 'Status Program 2 OFF'); p2 = (msg === '1') ? 1 : 0; }
                 if (topic === 'set-p3-ok') { updateStatusColor('setp3', msg === '1' ? 'Status Program 3 ON' : 'Status Program 3 OFF'); p3 = (msg === '1') ? 1 : 0; }
