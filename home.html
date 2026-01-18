@@ -364,6 +364,7 @@
                 return;
             }
             connect();
+
         });
 
         function go(page) {
@@ -371,61 +372,85 @@
             localStorage.setItem('currentPage', page);
             if (page === 'home') {
                 app.innerHTML = `
-                    <div class="card">
-                        <div class="card-title"><i class="fas fa-th-large"></i> ฟังก์ชันการทำงาน</div>
-                        <button class="action-btn" onclick="go('setting1')">
-                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
-                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
-                            </div>
-                            <div style="text-align:left; flex-grow:1;">
-                                <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 1</span>
-                                <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
-                            </div>
-                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
-                        </button>
+        <div class="card">
+            <div class="card-title"><i class="fas fa-cog"></i> ฟังก์ชันการทำงาน</div>
+            
+            <button class="action-btn" onclick="go('setting1')">
+                <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                </div>
+                <div style="text-align:left; flex-grow:1;">
+                    <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 1</span>
+                    <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+            </button>
 
-                         <button class="action-btn" onclick="go('setting2')">
-                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
-                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
-                            </div>
-                            <div style="text-align:left; flex-grow:1;">
-                                <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 2</span>
-                                <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
-                            </div>
-                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
-                        </button>
+            <button class="action-btn" onclick="go('setting2')">
+                <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                </div>
+                <div style="text-align:left; flex-grow:1;">
+                    <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 2</span>
+                    <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+            </button>
 
-                         <button class="action-btn" onclick="go('setting3')">
-                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
-                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
-                            </div>
-                            <div style="text-align:left; flex-grow:1;">
-                                <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 3</span>
-                                <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
-                            </div>
-                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
-                        </button>
-                    </div>
+            <button class="action-btn" onclick="go('setting3')">
+                <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
+                </div>
+                <div style="text-align:left; flex-grow:1;">
+                    <span style="display:block; font-size:15px;">ตั้งค่าโปรแกรม 3</span>
+                    <small style="color:var(--text-muted); font-weight:400;">จัดการเวลาเปิด-ปิดอัตโนมัติ</small>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+            </button>
+        </div>
 
+        <div class="card">
+            <div class="card-title"><i class="fas fa-thermometer-half"></i> ระบบตรวจวัดอุณหภูมิและความชื้น พร้อมควบคุมรีเลย์</div>
+            <button class="action-btn" onclick="go('temp&humi')">
+                <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-thermometer-half" style="color:var(--primary-color); font-size:20px;"></i>
+                </div>
+                <div style="text-align:left; flex-grow:1;">
+                    <span style="display:block; font-size:15px;">ตรวจสอบอุณหภูมิ ความชื้น และการทำงานของรีเลย์</span>
+                    <small style="color:var(--text-muted); font-weight:400;">ตั้งค่าการแจ้งเตือน Temp&Humi พร้อมควบคุมรีเลย์</small>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+            </button>
+        </div>
 
-                          <div class="card">
-                        <div class="card-title"><i class="fas fa-th-large"></i> ระบบตรวจวัดอุณหภูมิและความชื้น พร้อมควบคุมรีเลย์</div>
-                        <button class="action-btn" onclick="go('temp&humi')">
-                            <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
-                                <i class="fas fa-clock" style="color:var(--primary-color); font-size:20px;"></i>
-                            </div>
-                            <div style="text-align:left; flex-grow:1;">
-                                <span style="display:block; font-size:15px;">ตรวจสอบอุณหภูมิ ความชื้น และการทำงานของรีเลย์</span>
-                                <small style="color:var(--text-muted); font-weight:400;">ตั้งค่าการแจ้งเตือน Temp&Humi พร้อมควบคุมรีเลย์</small>
-                            </div>
-                            <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
-                        </button>
+        <div class="card">
+            <div class="card-title"><i class="fas fa-redo"></i> ตั้งค่าวันและเวลาในการทำซ้ำ</div>
+            <button class="action-btn" onclick="go('Set_Repeat')">
+                <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-sync-alt" style="color:var(--primary-color); font-size:20px;"></i>
+                </div>
+                <div style="text-align:left; flex-grow:1;">
+                    <span style="display:block; font-size:15px;">กำหนดวันเวลาการทำซ้ำ</span>
+                    <small style="color:var(--text-muted); font-weight:400;">เลือกวันและเวลาที่ต้องการให้ระบบทำงานซ้ำ ตั้งแต่ 1 นาที ถึง 23 ชั่วโมง 59 นาที</small>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+            </button>
+        </div>
 
-                     
-                    </div>
-
-                    
-                `;
+        <div class="card">
+            <div class="card-title"><i class="fas fa-cloud-upload-alt"></i> Version Update</div>
+            <button class="action-btn" onclick="go('version')">
+                <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-cloud-upload-alt" style="color:var(--primary-color); font-size:20px;"></i>
+                </div>
+                <div style="text-align:left; flex-grow:1;">
+                    <span style="display:block; font-size:15px;">ตรวจสอบ Version Update</span>
+                    <small style="color:var(--text-muted); font-weight:400;">อัปเดตเฟิร์มแวร์ใหม่ล่าสุด</small>
+                </div>
+                <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
+            </button>
+        </div>
+    `;
             } else if (page === 'setting1') {
                 connect();
                 app.innerHTML = `
@@ -859,9 +884,189 @@
             </div>
         </div>
     `;
+            } else if (page === 'Set_Repeat') {
+                connect();
+                app.innerHTML = `
+        <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%); border: 1px solid rgba(78,115,223,0.15);">
+            <div class="card-title" style="font-size:18px; padding-bottom:12px; border-bottom:1px solid #edf2f7;">
+                <i class="fas fa-redo-alt" style="color:var(--primary-color); margin-right:10px;"></i>
+                ตั้งค่าการทำงานซ้ำ (Repeat Timer)
+            </div>
+
+            
+
+         <!-- ส่วนควบคุมหลัก + รีเซ็ต -->
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0;">
+    <button class="action-btn btn-primary" onclick="reset_Repeat('esp32/Reset_Repeat')">
+        <i class="fas fa-sync-alt"></i> รีเซ็ต Repeat
+    </button>
+
+    <button class="action-btn" onclick="send_mqtt_interlock('/Repeat_minute','1')">
+        <i class="fas fa-clock"></i> Repeat ทุกนาที
+        <span id="repeat-minute-label" style="margin-left:8px; font-size:0.9em; opacity:0.8;"></span>
+    </button>
+
+    <button class="action-btn" onclick="send_mqtt_interlock('/Repeat_minute_hour','1')">
+        <i class="fas fa-hourglass-half"></i> Repeat ชม.+นาที
+        <span id="repeat-hour-label" style="margin-left:8px; font-size:0.9em; opacity:0.8;"></span>
+    </button>
+</div>
+
+<p id="/Status_RP_minute" class="status-text" style="margin:4px 0;"></p>
+<p id="/Status_RP_minute_hour" class="status-text" style="margin:4px 0;"></p>
+
+
+
+            <!-- วันทำซ้ำ -->
+            <div class="card" style="margin-bottom:24px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);">
+                <div class="card-title" style="color:var(--success-color); font-size:16px;">
+                    <i class="fas fa-calendar-check"></i> วันที่จะให้ระบบทำงานซ้ำ
+                </div>
+                <div class="days-grid" style="padding: 8px; background: rgba(28,200,138,0.03); border-radius: 12px;">
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sun','7')">อา.</button><div id="/Sun_Repeat" class="day-status">--</div></div>
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Mon','1')">จ.</button><div id="/Mon_Repeat" class="day-status">--</div></div>
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Tue','2')">อ.</button><div id="/Tue_Repeat" class="day-status">--</div></div>
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Wed','3')">พ.</button><div id="/Wed_Repeat" class="day-status">--</div></div>
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Thu','4')">พฤ.</button><div id="/Thu_Repeat" class="day-status">--</div></div>
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Fri','5')">ศ.</button><div id="/Fri_Repeat" class="day-status">--</div></div>
+                    <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sat','6')">ส.</button><div id="/Sat_Repeat" class="day-status">--</div></div>
+                </div>
+            </div>
+
+            <!-- ตั้งค่าเวลาเริ่มต้น + ช่วงซ้ำ -->
+            <div class="card" style="background: rgba(78,115,223,0.03); border: 1px solid rgba(78,115,223,0.15);">
+                <div class="card-title" style="color:var(--primary-color); font-size:16px;">
+                    <i class="fas fa-stopwatch"></i> กำหนดเวลาเริ่มต้นและช่วงการซ้ำ
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 16px;">
+                    <!-- เริ่มต้น ชั่วโมง -->
+                    <div class="control-group" style="background:white; padding:16px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                        <label class="label-mini" style="display:block; margin-bottom:8px;">เริ่มต้นที่ชั่วโมง</label>
+                        <input type="number" id="Start_hour" min="0" max="23" placeholder="0–23" 
+                               style="width:100%; padding:14px; font-size:20px; text-align:center; border:2px solid #e2e8f0; border-radius:10px; margin-bottom:10px; background:#fdfdff;">
+                        <button class="action-btn btn-success" style="width:100%;" 
+                                onclick="send_mqtt('/Set_H',document.getElementById('Start_hour').value)">
+                            <i class="fas fa-save"></i> บันทึกชั่วโมงเริ่ม
+                        </button>
+                    </div>
+
+                    <!-- เริ่มต้น นาที -->
+                    <div class="control-group" style="background:white; padding:16px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                        <label class="label-mini" style="display:block; margin-bottom:8px;">เริ่มต้นที่นาที</label>
+                        <input type="number" id="Start_minute" min="0" max="59" placeholder="0–59" 
+                               style="width:100%; padding:14px; font-size:20px; text-align:center; border:2px solid #e2e8f0; border-radius:10px; margin-bottom:10px; background:#fdfdff;">
+                        <button class="action-btn btn-success" style="width:100%;" 
+                                onclick="send_mqtt('/Set_T',document.getElementById('Start_minute').value)">
+                            <i class="fas fa-save"></i> บันทึกนาทีเริ่ม
+                        </button>
+                    </div>
+
+                    <!-- ซ้ำทุก ชั่วโมง -->
+                    <div class="control-group" style="background:white; padding:16px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                        <label class="label-mini" style="display:block; margin-bottom:8px;">ทำซ้ำทุก</label>
+                        <input type="number" id="Repeat_hour" min="0" max="23" placeholder="ชั่วโมง (0=ไม่ซ้ำ)" 
+                               style="width:100%; padding:14px; font-size:20px; text-align:center; border:2px solid #e2e8f0; border-radius:10px; margin-bottom:10px; background:#fdfdff;">
+                        <button class="action-btn btn-primary" style="width:100%;" 
+                                onclick="send_mqtt('/Repeat_hour_input',document.getElementById('Repeat_hour').value)">
+                            <i class="fas fa-save"></i> บันทึกช่วงชั่วโมง
+                        </button>
+                    </div>
+
+                    <!-- ซ้ำทุก นาที -->
+                    <div class="control-group" style="background:white; padding:16px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
+                        <label class="label-mini" style="display:block; margin-bottom:8px;">ทำซ้ำทุก</label>
+                        <input type="number" id="Repeat_minute" min="1" max="59" placeholder="นาที (1-59)" 
+                               style="width:100%; padding:14px; font-size:20px; text-align:center; border:2px solid #e2e8f0; border-radius:10px; margin-bottom:10px; background:#fdfdff;">
+                        <button class="action-btn btn-primary" style="width:100%;" 
+                                onclick="send_mqtt('/Repeat_minute_input',document.getElementById('Repeat_minute').value)">
+                            <i class="fas fa-save"></i> บันทึกช่วงนาที
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- สถานะสรุป -->
+            <div class="card" style="margin-top:24px; background: rgba(28,200,138,0.04); border:1px solid rgba(28,200,138,0.2);">
+                <div class="card-title" style="color:var(--success-color); font-size:16px;">
+                    <i class="fas fa-info-circle"></i> สถานะการตั้งค่าปัจจุบัน
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; padding: 12px;">
+                    <div class="status-text" style="background:white; border:1px solid #e2e8f0;">
+                        เริ่มต้น <strong id="/set_Start_hour_value" style="color:var(--primary-color);">--</strong> : 
+                        <strong id="/set_Start_minute_value" style="color:var(--primary-color);">--</strong>
+                    </div>
+                    <div class="status-text" style="background:white; border:1px solid #e2e8f0;">
+                        ซ้ำทุก <strong id="/set_Repeat_hour_value" style="color:var(--success-color);">--</strong> ชม.  
+                        <strong id="/set_Repeat_minute_value" style="color:var(--success-color);">--</strong> น.
+                    </div>
+                    <div class="status-text" style="background:white; border:1px solid #e2e8f0; grid-column: span 2;">
+                        ครั้งถัดไป <strong id="/Next_hour" style="color:#e67e22;">--</strong> : 
+                        <strong id="/Next_minute" style="color:#e67e22;">--</strong>
+                    </div>
+                    <div class="status-text" style="background:white; border:1px solid #e2e8f0; grid-column: span 2; text-align:center;">
+                        LED Hour: <strong id="/LED_RP_hour">--</strong>  
+                          |  Minute: <strong id="/LED_RP_minute">--</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+            } else if (page === 'version') {
+                connect();
+                app.innerHTML = `
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-cloud-upload-alt" style="color: var(--primary-color);"></i>
+                อัปเดตเฟิร์มแวร์ (OTA)
+            </div>
+
+            <div style="margin: 20px 0; text-align: center;">
+                <p class="th-label" style="margin-bottom: 12px;">
+                    กดปุ่มด้านล่างเพื่อเริ่มอัปเดตเฟิร์มแวร์ผ่าน OTA
+                </p>
+                
+                <button class="action-btn btn-primary" 
+                        onclick="send_mqtt('/ESP_upload_OTA_', 'Update_OTA')">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Update Version
+                </button>
+            </div>
+
+            <!-- สถานะการ เวอร์ชันปัจจุบัน - ปรับให้เข้ากับเพื่อน ๆ -->
+            <div style="margin-top: 28px; padding: 16px; background: #f8f9fc; border-radius: 12px; border: 1px solid #edf2f7; text-align: center;">
+                <p class="th-label" style="margin-bottom: 8px; font-size: 14px;">
+                    <i class="fas fa-info-circle" style="color: var(--primary-color); margin-right: 6px;"></i>
+                     เวอร์ชันปัจจุบัน
+                </p>
+                <p id="/status_version" class="status-text" style="font-size: 16px; font-weight: 600; margin: 0; padding: 12px;">
+                    กำลังโหลด...
+                </p>
+            </div>
+
+            <!--  สถานะการอัปเดต (ถ้ามี topic แยก) -->
+            <div style="margin-top: 20px; padding: 12px; background: rgba(28,200,138,0.05); border-radius: 10px; text-align: center;">
+                <p class="th-label" style="margin: 0 0 6px 0; font-size: 13px;">
+                    <i class="fas fa-code-branch" style="color: var(--success-color); margin-right: 6px;"></i>
+                     สถานะการอัปเดต
+                </p>
+                <p id="/status_V" class="th-value" style="font-size: 20px; margin: 0; color: var(--text-main);">
+                    -----------
+                </p>
+            </div>
+
+            <div style="margin-top: 24px; text-align: center; color: var(--text-muted); font-size: 13px; line-height: 1.5;">
+                หมายเหตุ: ระหว่างอัปเดต ระบบอาจหยุดตอบสนองชั่วคราว<br>
+                กรุณาอย่าปิดหน้าเว็บหรือถอดปลั๊กอุปกรณ์
+            </div>
+        </div>
+
+        <!-- ปุ่มกลับ -->
+        <button class="action-btn" onclick="go('home')" style="margin-top: 24px;">
+            <i class="fas fa-arrow-left"></i> กลับไปหน้าหลัก
+        </button>
+    `;
             }
-
-
 
         }
 
@@ -903,6 +1108,7 @@
         function reset_p3(data_Reset) { if (data_Reset === 'esp32/Resetp3') { setTimeout(() => { send_mqtt('esp32/Resetp3', '1'); send_mqtt('esp32/Resetp3', '0'); }, 100); } }
 
         function reset_temp_Humi(data_Reset) { if (data_Reset === '/Reset_T_H') { setTimeout(() => { send_mqtt('/Reset_T_H', '1'); send_mqtt('/Reset_T_H', '0'); }, 100); } }
+        function reset_Repeat(data_Reset) { if (data_Reset === 'esp32/Reset_Repeat') { setTimeout(() => { send_mqtt('esp32/Reset_Repeat', '1'); send_mqtt('esp32/Reset_Repeat', '0'); }, 100); } }
 
 
         function set_time(topic, payl) { if (!payl) return; client.publish(topic, payl); }
@@ -989,10 +1195,141 @@
 
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+                client.subscribe('/Status_RP_minute'); client.subscribe('/Status_RP_minute_hour')
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                client.subscribe('/LED_RP_hour'); client.subscribe('/LED_RP_minute');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // ON status Repeat
+                client.subscribe('/Mon_Repeat');
+                client.subscribe('/Tue_Repeat');
+                client.subscribe('/Wed_Repeat');
+                client.subscribe('/Thu_Repeat');
+                client.subscribe('/Fri_Repeat');
+                client.subscribe('/Sat_Repeat');
+                client.subscribe('/Sun_Repeat');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                client.subscribe('/set_Start_hour_value'); client.subscribe('/set_Start_minute_value');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                client.subscribe('/set_Repeat_hour_value'); client.subscribe('/set_Repeat_minute_value');
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                client.subscribe('/Next_hour'); client.subscribe('/Next_minute');
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                client.subscribe('/WiFi_RSSI');
+                client.subscribe('/WiFi_Signal_Quality');
+                client.subscribe('/status_version')
+                client.subscribe('/status_V')
+
+
             });
 
             client.on('message', (topic, message) => {
                 let msg = message.toString();
+
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/Status_RP_minute') { updateStatusColor('/Status_RP_minute', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_RP_minute = (msg === '1') ? 1 : 0; }
+                if (topic === '/Status_RP_minute_hour') { updateStatusColor('/Status_RP_minute_hour', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); Status_RP_minute_hour = (msg === '1') ? 1 : 0; }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                const daysOn_Repeat = {
+                    '/Mon_Repeat': '/Mon_Repeat',
+                    '/Tue_Repeat': '/Tue_Repeat',
+                    '/Wed_Repeat': '/Wed_Repeat',
+                    '/Thu_Repeat': '/Thu_Repeat',
+                    '/Fri_Repeat': '/Fri_Repeat',
+                    '/Sat_Repeat': '/Sat_Repeat',
+                    '/Sun_Repeat': '/Sun_Repeat',
+
+                };
+                if (daysOn_Repeat[topic]) {
+                    updateStatusColor(daysOn_Repeat[topic], msg === '1' ? 'ON' : 'Off');
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (topic === '/LED_RP_hour') { updateStatusColor('/LED_RP_hour', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); }
+                if (topic === '/LED_RP_minute') { updateStatusColor('/LED_RP_minute', msg === '1' ? 'Status OPEN' : 'Status CLOSE'); }
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (topic === '/status_version') {
+                    const tt = document.getElementById('/status_version')
+                    if (!tt) return;
+                    tt.innerText = "Version : " + msg;
+                }
+
+                if (topic === '/status_V') {
+                    const tt = document.getElementById('/status_V')
+                    if (!tt) return;
+                    tt.innerText = msg;
+                }
+
+
+                if (topic === '/WiFi_RSSI') {
+                    const tt = document.getElementById('/WiFi_RSSI')
+                    if (!tt) return;
+                    tt.innerText = msg + " RSSI";
+                }
+
+                if (topic === '/WiFi_Signal_Quality') {
+                    const tt = document.getElementById('/WiFi_Signal_Quality')
+                    if (!tt) return;
+                    tt.innerText = msg;
+                }
+
+
+                if (topic === '/set_Start_hour_value') {
+                    const tt = document.getElementById('/set_Start_hour_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " H";
+                }
+
+                if (topic === '/set_Start_minute_value') {
+                    const tt = document.getElementById('/set_Start_minute_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " M";
+
+
+                }
+
+
+                if (topic === '/set_Repeat_hour_value') {
+                    const tt = document.getElementById('/set_Repeat_hour_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " H";
+                }
+
+                if (topic === '/set_Repeat_minute_value') {
+                    const tt = document.getElementById('/set_Repeat_minute_value')
+                    if (!tt) return;
+                    tt.innerText = msg + " M";
+
+
+                }
+
+
+                if (topic === '/Next_hour') {
+                    const tt = document.getElementById('/Next_hour')
+                    if (!tt) return;
+                    tt.innerText = msg + " H";
+
+
+                }
+
+                if (topic === '/Next_minute') {
+                    const tt = document.getElementById('/Next_minute')
+                    if (!tt) return;
+                    tt.innerText = msg + " M";
+
+
+                }
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
                 if (topic === '/node') updateStatusColor('esp_online', msg === '1' ? 'ESP: Online' : 'ESP: Offline');
                 if (topic === 'set-p1-ok') { updateStatusColor('setp1', msg === '1' ? 'Status Program 1 ON' : 'Status Program 1 OFF'); a = (msg === '1') ? 1 : 0; }
                 if (topic === 'set-p2-ok') { updateStatusColor('setp2', msg === '1' ? 'Status Program 2 ON' : 'Status Program 2 OFF'); p2 = (msg === '1') ? 1 : 0; }
@@ -1345,6 +1682,7 @@
         var a = null, b = null, c = null, p2 = null, p3 = null, Sun = 0, Mon = 0, Tue = 0, Wed = 0, Thu = 0, Fri = 0, Sat = 0;
         var Sun_off = 0, Mon_off = 0, Tue_off = 0, Wed_off = 0, Thu_off = 0, Fri_off = 0, Sat_off = 0;
         var Status_set_teMp, Status_set_HuMi, Status_set_teMp_Low, Status_set_HuMi_Low, Status_set_teMp_High, Status_set_HuMi_High;
+        var Status_RP_minute, Status_RP_minute_hour;
 
         function send_mqtt_interlock(send_mqtt1, mass1) {
             if (send_mqtt1 === '/pro_Gram-1') {
@@ -1509,6 +1847,42 @@
             }
 
 
+            if (send_mqtt1 === '/Repeat_minute') {
+                if (mass1 === '1' && Status_RP_minute === 0) {
+                    Status_RP_minute = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_RP_minute === 1) {
+                    mass1 = '0';
+                    Status_RP_minute = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+            }
+
+            if (send_mqtt1 === '/Repeat_minute_hour') {
+                if (mass1 === '1' && Status_RP_minute_hour === 0) {
+                    Status_RP_minute_hour = 1;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+                if (mass1 === '1' && Status_RP_minute_hour === 1) {
+                    mass1 = '0';
+                    Status_RP_minute_hour = 0;
+                    return client.publish(send_mqtt1, mass1, { retain: true })
+
+                }
+
+
+
+            }
+
+
+
         }
     </script>
 </head>
@@ -1533,6 +1907,20 @@
             <i class="fas fa-sign-out-alt"></i> <span>ออกระบบ</span>
         </button>
     </nav>
+
+
+    <!-- WiFi Status - เพิ่มระยะห่างให้ดูโปร่งขึ้น -->
+    <div class="header-status" style="margin: 1px 0 32px 0; gap: 16px;">
+        <div class="status-badge" id="wifi-rssi-badge" style="padding: 16px 20px; font-size: 14px;">
+            <i class="fas fa-signal" style="margin-right: 10px; font-size: 16px;"></i>
+            WiFi RSSI: <span id="/WiFi_RSSI">-- dBm</span>
+        </div>
+
+        <div class="status-badge" id="wifi-quality-badge" style="padding: 16px 20px; font-size: 14px;">
+            <i class="fas fa-wifi" style="margin-right: 10px; font-size: 16px;"></i>
+            WiFi สถานะ: <span id="/WiFi_Signal_Quality">--</span>
+        </div>
+    </div>
 
     <div id="app"></div>
 
