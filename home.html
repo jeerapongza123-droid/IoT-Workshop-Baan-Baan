@@ -965,7 +965,7 @@
                     <!-- ซ้ำทุก ชั่วโมง -->
                     <div class="control-group" style="background:white; padding:16px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
                         <label class="label-mini" style="display:block; margin-bottom:8px;">ทำซ้ำทุก</label>
-                        <input type="number" id="Repeat_hour" min="0" max="23" placeholder="ชั่วโมง (0=ไม่ซ้ำ)" 
+                        <input type="number" id="Repeat_hour" min="0" max="23" placeholder="0-23" 
                                style="width:100%; padding:14px; font-size:20px; text-align:center; border:2px solid #e2e8f0; border-radius:10px; margin-bottom:10px; background:#fdfdff;">
                         <button class="action-btn btn-primary" style="width:100%;" 
                                 onclick="send_mqtt('/Repeat_hour_input',document.getElementById('Repeat_hour').value)">
@@ -976,7 +976,7 @@
                     <!-- ซ้ำทุก นาที -->
                     <div class="control-group" style="background:white; padding:16px; border-radius:12px; box-shadow:0 3px 10px rgba(0,0,0,0.05);">
                         <label class="label-mini" style="display:block; margin-bottom:8px;">ทำซ้ำทุก</label>
-                        <input type="number" id="Repeat_minute" min="1" max="59" placeholder="นาที (1-59)" 
+                        <input type="number" id="Repeat_minute" min="1" max="59" placeholder="0-59" 
                                style="width:100%; padding:14px; font-size:20px; text-align:center; border:2px solid #e2e8f0; border-radius:10px; margin-bottom:10px; background:#fdfdff;">
                         <button class="action-btn btn-primary" style="width:100%;" 
                                 onclick="send_mqtt('/Repeat_minute_input',document.getElementById('Repeat_minute').value)">
