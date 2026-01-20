@@ -208,7 +208,7 @@
             const userId = document.getElementById("userId").value;
             const pass = document.getElementById("pass").value;
 
-            fetch('https://node-server-p56n.onrender.com/login', {
+            fetch('http://localhost:3000/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId, pass })
@@ -281,6 +281,7 @@
         </div>
 
         <h1>Smart Home</h1>
+        <h1>By Jeerapong Santhong</h1>
         <p class="subtitle">กรุณาเข้าสู่ระบบเพื่อควบคุมอุปกรณ์</p>
 
         <div class="input-group">
@@ -309,4 +310,3 @@
 </body>
 
 </html>
-
