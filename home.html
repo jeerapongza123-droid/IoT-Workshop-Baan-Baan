@@ -9,15 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q2BZ2GYWB7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q2BZ2GYWB7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-  gtag('config', 'G-Q2BZ2GYWB7');
-</script>
+        gtag('config', 'G-Q2BZ2GYWB7');
+    </script>
 
 
     <style>
@@ -1943,21 +1943,6 @@
 
             }
 
-            if (send_mqtt1 === 'set_HuMi') {
-                if (mass1 === '1' && Status_set_HuMi === 0) {
-                    Status_set_HuMi = 1;
-                    return client.publish(send_mqtt1, mass1, { retain: true })
-
-                }
-
-                if (mass1 === '1' && Status_set_HuMi === 1) {
-                    mass1 === '0';
-                    Status_set_HuMi = 0;
-                    return client.publish(send_mqtt1, mass1, { retain: true })
-
-                }
-
-            }
 
             if (send_mqtt1 === 'set_teMP_Low') {
                 if (mass1 === '1' && Status_set_teMp_Low === 0) {
@@ -2123,4 +2108,3 @@
 </body>
 
 </html>
-
