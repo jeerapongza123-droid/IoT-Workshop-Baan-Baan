@@ -1443,6 +1443,22 @@ SECURE MQTT CONNECTION
 
         }
 
+        function togglePW() {
+            const pw = document.getElementById("mqtt_pass");
+            const icon = event.target;
+
+            if (pw.type === "password") {
+                pw.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                pw.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+
+
         function updateStatusColor(id, text) {
             const el = document.getElementById(id);
             if (!el) return;
