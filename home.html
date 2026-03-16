@@ -1224,63 +1224,221 @@
             else if (page === 'setting_MQTT_Server') {
                 connect();
                 app.innerHTML = `
-        <div class="card" style="border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-radius: 24px; padding: 25px;">
-            <div class="card-title" style="padding-bottom: 20px; border-bottom: 1.5px solid #f1f5f9; margin-bottom: 25px; display: flex; align-items: center;">
-                <div style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 8px 15px rgba(78, 115, 223, 0.2);">
-                    <i class="fas fa-server" style="color: white; font-size: 20px;"></i>
-                </div>
-                <div>
-                    <span style="display: block; font-weight: 700; color: #1e293b; font-size: 18px;">MQTT Config</span>
-                    <small style="color: #94a3b8; font-weight: 400;">ตั้งค่าการเชื่อมต่อโบรคเกอร์</small>
-                </div>
-            </div>
+<div class="card" style="
+border:none;
+border-radius:26px;
+padding:28px;
+box-shadow:0 25px 45px rgba(0,0,0,0.08);
+background:white;
+">
 
-            <div style="background: #ffffff; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                
-                <div class="setting-group" style="margin-bottom: 20px;">
-                    <label class="th-label" style="font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px; display: block;">
-                        <i class="fas fa-globe-americas" style="margin-right: 5px; color: var(--primary-color);"></i> MQTT Server / Host
-                    </label>
-                    <input type="text" id="mqtt_server" class="setting-input" 
-                           style="border-radius: 12px; border: 2px solid #f1f5f9; padding: 14px; background: #f8fafc; transition: all 0.3s;" 
-                           placeholder="เช่น broker.hivemq.com">
-                </div>
+<!-- TITLE -->
+<div style="
+display:flex;
+align-items:center;
+margin-bottom:25px;
+padding-bottom:18px;
+border-bottom:1px solid #f1f5f9;
+">
 
-                <div class="setting-group">
-                    <label class="th-label" style="font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px; display: block;">
-                        <i class="fas fa-door-open" style="margin-right: 5px; color: var(--primary-color);"></i> Port Number
-                    </label>
-                    <input type="number" id="mqtt_port" class="setting-input" 
-                           style="border-radius: 12px; border: 2px solid #f1f5f9; padding: 14px; background: #f8fafc; transition: all 0.3s;" 
-                           placeholder="1883">
-                </div>
-            </div>
+<div style="
+width:50px;
+height:50px;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#4e73df,#224abe);
+color:white;
+font-size:20px;
+margin-right:15px;
+box-shadow:0 10px 20px rgba(78,115,223,0.3);
+">
+<i class="fas fa-server"></i>
+</div>
 
-            <div style="margin-top: 35px;">
-                <button class="action-btn btn-primary" 
-                        onclick="saveSettings()" 
-                        style="width: 100%; justify-content: center; height: 55px; border-radius: 16px; background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); box-shadow: 0 10px 20px rgba(78, 115, 223, 0.3); border: none; font-weight: 600; font-size: 16px; letter-spacing: 0.5px;">
-                    <i class="fas fa-check-circle" style="margin-right: 10px;"></i> บันทึกการตั้งค่า
-                </button>
-                
-                <button class="action-btn" onclick="go('home')" 
-                        style="width: 100%; justify-content: center; margin-top: 15px; height: 50px; background: transparent; color: #94a3b8; border: none; font-size: 14px; font-weight: 500;">
-                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> กลับหน้าหลักโดยไม่บันทึก
-                </button>
-            </div>
-        </div>
+<div>
+<div style="font-size:19px;font-weight:700;color:#1e293b;">
+MQTT Configuration
+</div>
+<div style="font-size:12px;color:#94a3b8;">
+ตั้งค่าการเชื่อมต่อ Broker
+</div>
+</div>
 
-        <div style="text-align: center; margin-top: 20px; color: #cbd5e1; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;">
-            SECURE MQTT CONNECTION
-        </div>
-    `;
+</div>
+
+
+<!-- FORM BOX -->
+<div style="
+background:#f8fafc;
+border-radius:20px;
+padding:22px;
+border:1px solid #eef2f7;
+">
+
+<!-- SERVER -->
+<div style="margin-bottom:18px;">
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-globe" style="margin-right:6px;"></i>
+MQTT Server
+</label>
+
+<input id="mqtt_server" type="text"
+placeholder="เช่น xxxx.s1.eu.hivemq.cloud"
+style="
+width:100%;
+margin-top:6px;
+padding:14px;
+border-radius:12px;
+border:2px solid #eef2f7;
+background:white;
+outline:none;
+transition:0.3s;
+">
+</div>
+
+
+<!-- PORT -->
+<div style="margin-bottom:18px;">
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-network-wired" style="margin-right:6px;"></i>
+Port
+</label>
+
+<input id="mqtt_port" type="number"
+placeholder="8884"
+style="
+width:100%;
+margin-top:6px;
+padding:14px;
+border-radius:12px;
+border:2px solid #eef2f7;
+background:white;
+outline:none;
+transition:0.3s;
+">
+</div>
+
+
+<!-- USER -->
+<div style="margin-bottom:18px;">
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-user" style="margin-right:6px;"></i>
+Username
+</label>
+
+<input id="mqtt_user" type="text"
+placeholder="MQTT Username"
+style="
+width:100%;
+margin-top:6px;
+padding:14px;
+border-radius:12px;
+border:2px solid #eef2f7;
+background:white;
+outline:none;
+">
+</div>
+
+
+<!-- PASSWORD -->
+<div>
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-lock" style="margin-right:6px;"></i>
+Password
+</label>
+
+<div style="position:relative;margin-top:6px;">
+
+<input id="mqtt_pass" type="password"
+placeholder="MQTT Password"
+style="
+width:100%;
+padding:14px;
+border-radius:12px;
+border:2px solid #eef2f7;
+background:white;
+outline:none;
+">
+
+<i onclick="togglePW()"
+class="fas fa-eye"
+style="
+position:absolute;
+right:14px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:#94a3b8;
+"></i>
+
+</div>
+</div>
+
+</div>
+
+
+<!-- BUTTON -->
+<div style="margin-top:30px;">
+
+<button onclick="saveSettings()" style="
+width:100%;
+height:55px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#4e73df,#224abe);
+color:white;
+font-size:16px;
+font-weight:600;
+letter-spacing:.5px;
+box-shadow:0 12px 22px rgba(78,115,223,0.35);
+cursor:pointer;
+transition:0.2s;
+">
+<i class="fas fa-save" style="margin-right:8px;"></i>
+บันทึกการตั้งค่า
+</button>
+
+
+<button onclick="go('home')" style="
+width:100%;
+margin-top:12px;
+background:none;
+border:none;
+color:#94a3b8;
+font-size:14px;
+cursor:pointer;
+">
+<i class="fas fa-arrow-left"></i>
+กลับหน้าหลัก
+</button>
+
+</div>
+
+</div>
+
+<div style="
+text-align:center;
+margin-top:18px;
+font-size:11px;
+letter-spacing:1px;
+color:#cbd5e1;
+">
+SECURE MQTT CONNECTION
+</div>
+`;
 
             } // ใส่ไว้หลัง app.innerHTML = `...`;
-            const currentServer = localStorage.getItem('mqtt_server') || 'broker.hivemq.com';
+            const currentServer = localStorage.getItem('mqtt_server') || '568216626a4345d89513eab71bb7057b.s1.eu.hivemq.cloud';
             const currentPort = localStorage.getItem('mqtt_port') || '8884';
+            const currentUser = localStorage.getItem('mqtt_user') || 'Jeerapong';
+            const currentPass = localStorage.getItem('mqtt_pass') || 'Doy6800172#';
 
             document.getElementById('mqtt_server').value = currentServer;
             document.getElementById('mqtt_port').value = currentPort;
+            document.getElementById('mqtt_user').value = currentUser;
+            document.getElementById('mqtt_pass').value = currentPass;
 
 
         }
@@ -1347,11 +1505,15 @@
         function saveSettings() {
             const server = document.getElementById('mqtt_server').value;
             const port = document.getElementById('mqtt_port').value;
+            const user = document.getElementById('mqtt_user').value;
+            const pass = document.getElementById('mqtt_pass').value;
 
             if (server && port) {
                 // บันทึกเข้า Memory ของ Browser
                 localStorage.setItem('mqtt_server', server);
                 localStorage.setItem('mqtt_port', port);
+                localStorage.setItem('mqtt_user', user);
+                localStorage.setItem('mqtt_pass', pass);
 
                 alert('บันทึกสำเร็จ! กำลังเชื่อมต่อใหม่...');
 
@@ -1373,6 +1535,8 @@
             // 1. ดึงค่าที่บันทึกไว้ในความจำ (ถ้าไม่มีให้ใช้ค่า Default)
             const savedServer = localStorage.getItem('mqtt_server');
             const savedPort = localStorage.getItem('mqtt_port');
+            const savedUser = localStorage.getItem('mqtt_user');
+            const savedPass = localStorage.getItem('mqtt_pass');
 
             // 2. ประกอบ URL (ใช้ wss:// สำหรับความปลอดภัย)
             // ถ้าเป็น HiveMQ ต้องใช้ Port 8884 สำหรับ WebSocket (WSS)
@@ -1380,7 +1544,10 @@
 
             const options = {
                 keepalive: 60,
-                clientId: 'web_' + Math.random().toString(16).substr(2, 8)
+                clientId: 'web_' + "JEE_Ra_pOnG",
+                username: savedUser,
+                password: savedPass,
+                reconnectPeriod: 5000
             };
 
             console.log("Connecting to:", brokerUrl); // เช็คใน Console ว่า URL ถูกต้องไหม
