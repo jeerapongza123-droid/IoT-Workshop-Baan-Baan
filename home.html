@@ -1560,7 +1560,7 @@ SECURE MQTT CONNECTION
 
             const options = {
                 keepalive: 60,
-                clientId: 'web_JEE_Ra_pOnG_550e8400-e29b-41d4-a716-446655440000',
+                clientId: 'web' + Math.random().toString(16).substr(2, 8),
                 username: savedUser,
                 password: savedPass,
                 reconnectPeriod: 5000
