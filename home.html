@@ -589,15 +589,15 @@
 
 <div class="card">
     <div class="card-title">
-        <i class="fas fa-cog"></i> Settings MQTT Server
+        <i class="fas fa-cog"></i> Settings Network 
     </div>
     <button class="action-btn" onclick="go('setting_MQTT_Server')">
         <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center; position:relative;">
             <i class="fas fa-cog" style="color:var(--primary-color); font-size:20px;"></i>
         </div>
         <div style="text-align:left; flex-grow:1;">
-            <span style="display:block; font-size:15px;">ตั้งค่า MQTT Server</span>
-            <small style="color:var(--text-muted); font-weight:400;">กำหนดค่าการเชื่อมต่อ MQTT Server</small>
+            <span style="display:block; font-size:15px;">ตั้งค่า Network</span>
+            <small style="color:var(--text-muted); font-weight:400;">กำหนดค่าการเชื่อมต่อ MQTT Server และ Telegram</small>
         </div>
         <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
     </button>
@@ -1259,10 +1259,10 @@ box-shadow:0 10px 20px rgba(78,115,223,0.3);
 
 <div>
 <div style="font-size:19px;font-weight:700;color:#1e293b;">
-MQTT Configuration
+Network Configuration
 </div>
 <div style="font-size:12px;color:#94a3b8;">
-ตั้งค่าการเชื่อมต่อ Broker
+ตั้งค่าการเชื่อมต่อ Broker MQTT และ Telegram Bot
 </div>
 </div>
 
@@ -1276,6 +1276,28 @@ border-radius:20px;
 padding:22px;
 border:1px solid #eef2f7;
 ">
+
+    <!-- PROTOCOL -->
+<div style="margin-bottom:18px;">
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-exchange-alt" style="margin-right:6px;"></i>
+Protocol
+</label>
+
+<select id="mqtt_protocol" style="
+    width:100%;
+    margin-top:6px;
+    padding:14px;
+    border-radius:12px;
+    border:2px solid #eef2f7;
+    background:white;
+    outline:none;
+    transition:0.3s;
+">
+    <option value="wss">wss (Secure WebSocket)</option>
+    <option value="ws">ws (Non-secure WebSocket)</option>
+</select>
+</div>
 
 <!-- SERVER -->
 <div style="margin-bottom:18px;">
@@ -1341,7 +1363,6 @@ outline:none;
 ">
 </div>
 
-
 <!-- PASSWORD -->
 <div>
 <label style="font-size:13px;font-weight:600;color:#64748b;">
@@ -1362,7 +1383,7 @@ background:white;
 outline:none;
 ">
 
-<i onclick="togglePW()"
+<i onclick="togglePW('mqtt_pass', this)"
 class="fas fa-eye"
 style="
 position:absolute;
@@ -1376,8 +1397,84 @@ color:#94a3b8;
 </div>
 </div>
 
+<!-- ===== TELEGRAM BOX ===== -->
+<div style="
+margin-top:20px;
+background:#f8fafc;
+border-radius:16px;
+padding:18px;
+border:1px solid #eef2f7;
+">
+
+<!-- TITLE -->
+<div style="
+font-size:13px;font-weight:700;color:#475569;
+display:flex;align-items:center;margin-bottom:12px;
+">
+<i class="fab fa-telegram" style="margin-right:8px;"></i>
+Telegram Setting
 </div>
 
+<!-- BOT TOKEN -->
+<div style="margin-bottom:16px; position:relative;">
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-key" style="margin-right:6px;"></i>
+Bot Token
+</label>
+
+<input id="tg_token" type="password" placeholder="เช่น 123456:ABC-xxxx"
+  style="
+    width: 100%;
+    padding: 14px;
+    padding-right: 48px; /* เพิ่มตรงนี้ */
+    border-radius: 12px;
+    border: 2px solid #eef2f7;
+    background: white;
+    outline: none;
+    transition: 0.3s;
+    height: 100%;
+    box-sizing: border-box;
+  ">
+<i onclick="togglePW('tg_token', this)"
+class="fas fa-eye"
+style="
+position:absolute;right:14px;top:50%;
+transform:translateY(-50%);
+cursor:pointer;color:#94a3b8;
+"></i>
+</div>
+
+<!-- CHAT ID -->
+<div style="position:relative;">
+<label style="font-size:13px;font-weight:600;color:#64748b;">
+<i class="fas fa-id-badge" style="margin-right:6px;"></i>
+Chat ID
+</label>
+
+<div style="position: relative; height: 48px; margin-bottom:16px;">
+  <input id="tg_chat" type="password" placeholder="เช่น 123456789"
+    style="
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 2px solid #eef2f7;
+      background: white;
+      outline: none;
+      transition: 0.3s;
+      height: 100%;
+      box-sizing: border-box;
+    ">
+
+<i onclick="togglePW('tg_chat', this)"
+class="fas fa-eye"
+style="
+position:absolute;right:14px;top:50%;
+transform:translateY(-50%);
+cursor:pointer;color:#94a3b8;
+"></i>
+</div>
+
+</div>
 
 <!-- BUTTON -->
 <div style="margin-top:30px;">
@@ -1427,6 +1524,8 @@ color:#cbd5e1;
 ">
 SECURE MQTT CONNECTION
 </div>
+
+
 `;
 
             } // ใส่ไว้หลัง app.innerHTML = `...`;
@@ -1434,18 +1533,22 @@ SECURE MQTT CONNECTION
             const currentPort = localStorage.getItem('mqtt_port') || '8884';
             const currentUser = localStorage.getItem('mqtt_user') || 'Jeerapong';
             const currentPass = localStorage.getItem('mqtt_pass') || 'Doy6800172#';
+            const currentTgToken = localStorage.getItem('tg_token') || '';
+            const currentTgChat = localStorage.getItem('tg_chat') || '';
 
             document.getElementById('mqtt_server').value = currentServer;
             document.getElementById('mqtt_port').value = currentPort;
             document.getElementById('mqtt_user').value = currentUser;
             document.getElementById('mqtt_pass').value = currentPass;
+            document.getElementById('tg_token').value = currentTgToken;
+            document.getElementById('tg_chat').value = currentTgChat;
+            document.getElementById('mqtt_protocol').value = localStorage.getItem('mqtt_protocol') || 'wss';
 
 
         }
 
-        function togglePW() {
-            const pw = document.getElementById("mqtt_pass");
-            const icon = event.target;
+        function togglePW(inputId, icon) {
+            const pw = document.getElementById(inputId);
 
             if (pw.type === "password") {
                 pw.type = "text";
@@ -1518,11 +1621,63 @@ SECURE MQTT CONNECTION
         });
 
 
+        function sendTelegramMessage(message) {
+            // อ่านค่า Token และ Chat ID จาก input
+            const token = localStorage.getItem('tg_token');
+            const chatId = localStorage.getItem('tg_chat');
+
+
+            if (!token || !chatId) {
+                alert('กรุณากรอก Bot Token และ Chat ID ก่อนส่งข้อความ');
+                return;
+            }
+
+            // Telegram API URL
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+            // สร้าง request body
+            const payload = {
+                chat_id: chatId,
+                text: message
+            };
+
+            // ส่งข้อความด้วย fetch
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert('ส่งข้อความสำเร็จ ✅');
+                    } else {
+                        console.error(data);
+                        alert('ส่งข้อความไม่สำเร็จ ❌ ตรวจสอบ Token/Chat ID');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('เกิดข้อผิดพลาดขณะส่งข้อความ');
+                });
+        }
+
         function saveSettings() {
             const server = document.getElementById('mqtt_server').value;
             const port = document.getElementById('mqtt_port').value;
             const user = document.getElementById('mqtt_user').value;
             const pass = document.getElementById('mqtt_pass').value;
+            const botToken = document.getElementById('tg_token').value;
+            const chatId = document.getElementById('tg_chat').value;
+            const protocol = document.getElementById('mqtt_protocol').value; // เอาที่ผู้ใช้เลือก const protocol = document.getElementById('mqtt_protocol').value; // เอาที่ผู้ใช้เลือก
+
+
+
+            localStorage.setItem('tg_token', botToken);
+            localStorage.setItem('tg_chat', chatId);
+            localStorage.setItem('mqtt_protocol', protocol);
 
             if (server && port) {
                 // บันทึกเข้า Memory ของ Browser
@@ -1530,6 +1685,7 @@ SECURE MQTT CONNECTION
                 localStorage.setItem('mqtt_port', port);
                 localStorage.setItem('mqtt_user', user);
                 localStorage.setItem('mqtt_pass', pass);
+
 
                 alert('บันทึกสำเร็จ! กำลังเชื่อมต่อใหม่...');
 
@@ -1553,10 +1709,11 @@ SECURE MQTT CONNECTION
             const savedPort = localStorage.getItem('mqtt_port');
             const savedUser = localStorage.getItem('mqtt_user');
             const savedPass = localStorage.getItem('mqtt_pass');
+            const savedProtocol = localStorage.getItem('mqtt_protocol') || 'wss'; // เอาที่ผู้ใช้เลือก หรือใช้ wss เป็นค่าเริ่มต้น
 
             // 2. ประกอบ URL (ใช้ wss:// สำหรับความปลอดภัย)
             // ถ้าเป็น HiveMQ ต้องใช้ Port 8884 สำหรับ WebSocket (WSS)
-            const brokerUrl = `wss://${savedServer}:${savedPort}/mqtt`;
+            const brokerUrl = `${savedProtocol}://${savedServer}:${savedPort}/mqtt`;
 
             const options = {
                 keepalive: 60,
@@ -1812,11 +1969,20 @@ SECURE MQTT CONNECTION
                             // ตอนออนไลน์ → ใช้ไอคอนชิปสีเขียว
                             espBadge.innerHTML = '<i class="fas fa-microchip" style="color:var(--success-color); font-size:14px; margin-right:8px;"></i> ESP: Online';
                             espBadge.style.color = "var(--success-color)";
+                            //sendTelegramMessage('ESP32 is Online 🚀');
+                            cout = 1;
 
                         } else {
                             // ตอนออฟไลน์ → ใช้วงกลมแดง (เหมือนเดิม)
                             espBadge.innerHTML = '<i class="fas fa-circle" style="color:var(--danger-color); font-size:8px; margin-right:8px;"></i> ESP: Offline';
                             espBadge.style.color = "var(--danger-color)";
+                            send_mqtt('/status_V', '❗❗esp32 is offline ❗❗ ');
+                            if (cout === 1) {
+                                sendTelegramMessage('❗❗ESP32 is Offline❗❗');
+                                send_mqtt('/status_V', '❗❗esp32 is offline ❗❗ ');
+
+                                cout = 0;
+                            }
 
                         }
                     }
@@ -2174,6 +2340,8 @@ SECURE MQTT CONNECTION
         var Sun_off = 0, Mon_off = 0, Tue_off = 0, Wed_off = 0, Thu_off = 0, Fri_off = 0, Sat_off = 0;
         var Status_set_teMp, Status_set_HuMi, Status_set_teMp_Low, Status_set_HuMi_Low, Status_set_teMp_High, Status_set_HuMi_High;
         var Status_RP_minute, Status_RP_minute_hour;
+        var cout = null;
+
 
         function send_mqtt_interlock(send_mqtt1, mass1) {
             if (send_mqtt1 === '/pro_Gram-1') {
@@ -2415,7 +2583,10 @@ SECURE MQTT CONNECTION
         </div>
     </div>
 
+
+
     <div id="app"></div>
+
 
 </body>
 
