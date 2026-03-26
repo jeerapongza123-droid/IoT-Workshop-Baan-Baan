@@ -480,6 +480,11 @@
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
     <script>
+
+        // ตรวจสอบสถานะ login ก่อนโหลดหน้า
+        if (sessionStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "index.html";
+        }
         /* ฟังก์ชันดึงเวลาปัจจุบันใส่ในช่อง Input */
         function setCurrentTime() {
             setTimeout(() => {
@@ -1629,7 +1634,7 @@ SECURE MQTT CONNECTION
             localStorage.removeItem('ESP32_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อสำเร็จ
             localStorage.removeItem('mqtt_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อสำเร็จ
             localStorage.removeItem('mqtt_lost_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อ
-            //localStorage.removeItem('isLoggedIn'); // ลบสถานะการเข้าสู่ระบบ
+            sessionStorage.removeItem("isLoggedIn"); // ลบสถานะการเข้าสู่ระบบ
 
             go('home');
 
