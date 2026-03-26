@@ -592,15 +592,15 @@
 
 <div class="card">
     <div class="card-title">
-        <i class="fas fa-cog"></i> Settings Network 
+        <i class="fas fa-cog"></i> Settings MQTT Server 
     </div>
     <button class="action-btn" onclick="go('setting_MQTT_Server')">
         <div style="background:rgba(78, 115, 223, 0.1); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center; position:relative;">
             <i class="fas fa-cog" style="color:var(--primary-color); font-size:20px;"></i>
         </div>
         <div style="text-align:left; flex-grow:1;">
-            <span style="display:block; font-size:15px;">ตั้งค่า Network</span>
-            <small style="color:var(--text-muted); font-weight:400;">กำหนดค่าการเชื่อมต่อ MQTT Server และ Telegram</small>
+            <span style="display:block; font-size:15px;">ตั้งค่า Broker MQTT Server</span>
+            <small style="color:var(--text-muted); font-weight:400;">กำหนดค่าการเชื่อมต่อ MQTT Server MQTT Port</small>
         </div>
         <i class="fas fa-chevron-right" style="font-size:12px; opacity:0.3;"></i>
     </button>
@@ -1262,10 +1262,10 @@ box-shadow:0 10px 20px rgba(78,115,223,0.3);
 
 <div>
 <div style="font-size:19px;font-weight:700;color:#1e293b;">
-Network Configuration
+ MQTT Configuration
 </div>
 <div style="font-size:12px;color:#94a3b8;">
-ตั้งค่าการเชื่อมต่อ Broker MQTT และ Telegram Bot
+ตั้งค่าการเชื่อมต่อ Broker MQTT 
 </div>
 </div>
 
@@ -2107,7 +2107,7 @@ SECURE MQTT CONNECTION
                             if (!sessionStorage.getItem('ESP32_disconnected_alerted')) {
                                 setTimeout(() => {
                                     alert('ESP32 Disconnected ❌');
-                                }, 1000);
+                                }, 2000);
 
                                 sessionStorage.setItem('ESP32_disconnected_alerted', 'true');
                             }
