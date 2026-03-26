@@ -636,7 +636,7 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-title" style="color:var(--success-color)"><i class="fas fa-plus-circle"></i> ตั้งเวลาเปิด (Timer ON)</div>
+                        <div class="card-title" style="color:var(--success-color)"><i class="fas fa-plus-cirk"></i> ตั้งเวลาเปิด (Timer ON)</div>
                         <div class="days-grid">
                             <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Sun','7')">อา.</button><div id="/Sun" class="day-status">--</div></div>
                             <div class="day-box"><button class="day-btn" onclick="send_mqtt_interlock('/Mon','1')">จ.</button><div id="/Mon" class="day-status">--</div></div>
@@ -1277,14 +1277,7 @@ padding:22px;
 border:1px solid #eef2f7;
 ">
 
-    <!-- PROTOCOL -->
-<div style="margin-bottom:18px;">
-<label style="font-size:13px;font-weight:600;color:#64748b;">
-<i class="fas fa-exchange-alt" style="margin-right:6px;"></i>
-Protocol
-</label>
-
-<select id="mqtt_protocol" style="
+ <select id="mqtt_protocol" onchange="checkProtocol()" style="
     width:100%;
     margin-top:6px;
     padding:14px;
@@ -1297,6 +1290,19 @@ Protocol
     <option value="wss">wss (Secure WebSocket)</option>
     <option value="ws">ws (Non-secure WebSocket)</option>
 </select>
+
+<div id="ws_warning" style="
+    display:none;
+    margin-top:8px;
+    padding:10px;
+    border-radius:10px;
+    background:#fff7ed;
+    border:1px solid #fdba74;
+    color:#9a3412;
+    font-size:12px;
+    font-weight:600;
+">
+⚠️ Warning: หากเว็บเปิดผ่าน HTTPS จะไม่สามารถใช้ ws:// ได้ (ต้องใช้ wss:// เท่านั้น)
 </div>
 
 <!-- SERVER -->
@@ -1416,32 +1422,37 @@ Telegram Setting
 </div>
 
 <!-- BOT TOKEN -->
-<div style="margin-bottom:16px; position:relative;">
-<label style="font-size:13px;font-weight:600;color:#64748b;">
-<i class="fas fa-key" style="margin-right:6px;"></i>
-Bot Token
-</label>
+<div style="margin-bottom:16px;">
+  <label style="font-size:13px;font-weight:600;color:#64748b;">
+    <i class="fas fa-key" style="margin-right:6px;"></i>
+    Bot Token
+  </label>
 
-<input id="tg_token" type="password" placeholder="เช่น 123456:ABC-xxxx"
-  style="
-    width: 100%;
-    padding: 14px;
-    padding-right: 48px; /* เพิ่มตรงนี้ */
-    border-radius: 12px;
-    border: 2px solid #eef2f7;
-    background: white;
-    outline: none;
-    transition: 0.3s;
-    height: 100%;
-    box-sizing: border-box;
-  ">
-<i onclick="togglePW('tg_token', this)"
-class="fas fa-eye"
-style="
-position:absolute;right:14px;top:50%;
-transform:translateY(-50%);
-cursor:pointer;color:#94a3b8;
-"></i>
+  <div style="position:relative; margin-top:6px;">
+    <input id="tg_token" type="password" placeholder="เช่น 123456:ABC-xxxx"
+      style="
+        width: 100%;
+        padding: 14px;
+        padding-right: 48px;
+        border-radius: 12px;
+        border: 2px solid #eef2f7;
+        background: white;
+        outline: none;
+        transition: 0.3s;
+        box-sizing: border-box;
+      ">
+
+    <i onclick="togglePW('tg_token', this)"
+      class="fas fa-eye"
+      style="
+        position:absolute;
+        right:14px;
+        top:50%;
+        transform:translateY(-50%);
+        cursor:pointer;
+        color:#94a3b8;
+      "></i>
+  </div>
 </div>
 
 <!-- CHAT ID -->
@@ -1622,7 +1633,7 @@ SECURE MQTT CONNECTION
 
 
         function sendTelegramMessage(message) {
-            // อ่านค่า Token และ Chat ID จาก input
+            // อ่านค่า Token และ Chat ID จากที้บันทึกๆไว้ใน Local Storage
             const token = localStorage.getItem('tg_token');
             const chatId = localStorage.getItem('tg_chat');
 
@@ -1652,7 +1663,7 @@ SECURE MQTT CONNECTION
                 .then(response => response.json())
                 .then(data => {
                     if (data.ok) {
-                        alert('ส่งข้อความสำเร็จ ✅');
+                        alert('❌ esp32 offline ❌ แจ้งเตือนผ่าน Telegram เรียบร้อย ✅');
                     } else {
                         console.error(data);
                         alert('ส่งข้อความไม่สำเร็จ ❌ ตรวจสอบ Token/Chat ID');
@@ -1700,6 +1711,28 @@ SECURE MQTT CONNECTION
             }
         }
 
+        function checkProtocol() {
+            const select = document.getElementById("mqtt_protocol");
+            const warning = document.getElementById("ws_warning");
+
+            if (select.value === "ws") {
+                const ok = confirm(
+                    "⚠️ คุณเลือก ws (ไม่ปลอดภัย)\n\n" +
+                    "ถ้าเว็บเปิดผ่าน HTTPS จะเชื่อมต่อไม่ได้ (Mixed Content)\n\n" +
+                    "ต้องการใช้ ws ต่อหรือไม่?"
+                );
+
+                if (!ok) {
+                    select.value = "wss"; // กลับไป wss
+                    warning.style.display = "none";
+                    return;
+                }
+
+                warning.style.display = "block";
+            } else {
+                warning.style.display = "none";
+            }
+        }
 
         var client;
         function connect() {
@@ -1971,12 +2004,17 @@ SECURE MQTT CONNECTION
                             espBadge.style.color = "var(--success-color)";
                             //sendTelegramMessage('ESP32 is Online 🚀');
                             cout = 1;
+                            if (cout2 === 1) {
+                                sendTelegramMessage('ESP32 is Online ✅');
+                                send_mqtt('/status_V', 'ESP32 is Online ✅');
+                                cout2 = 0;
+                            }
 
                         } else {
                             // ตอนออฟไลน์ → ใช้วงกลมแดง (เหมือนเดิม)
                             espBadge.innerHTML = '<i class="fas fa-circle" style="color:var(--danger-color); font-size:8px; margin-right:8px;"></i> ESP: Offline';
                             espBadge.style.color = "var(--danger-color)";
-                            send_mqtt('/status_V', '❗❗esp32 is offline ❗❗ ');
+                            cout2 = 1;
                             if (cout === 1) {
                                 sendTelegramMessage('❗❗ESP32 is Offline❗❗');
                                 send_mqtt('/status_V', '❗❗esp32 is offline ❗❗ ');
@@ -2340,7 +2378,7 @@ SECURE MQTT CONNECTION
         var Sun_off = 0, Mon_off = 0, Tue_off = 0, Wed_off = 0, Thu_off = 0, Fri_off = 0, Sat_off = 0;
         var Status_set_teMp, Status_set_HuMi, Status_set_teMp_Low, Status_set_HuMi_Low, Status_set_teMp_High, Status_set_HuMi_High;
         var Status_RP_minute, Status_RP_minute_hour;
-        var cout = null;
+        var cout = null; var cout2 = null;
 
 
         function send_mqtt_interlock(send_mqtt1, mass1) {
