@@ -1663,7 +1663,7 @@ SECURE MQTT CONNECTION
                 .then(response => response.json())
                 .then(data => {
                     if (data.ok) {
-                        alert('❌ esp32 offline ❌ แจ้งเตือนผ่าน Telegram เรียบร้อย ✅');
+                        //alert('ส่งข้อความสำเร็จ ✅');
                     } else {
                         console.error(data);
                         alert('ส่งข้อความไม่สำเร็จ ❌ ตรวจสอบ Token/Chat ID');
@@ -1706,6 +1706,10 @@ SECURE MQTT CONNECTION
                 if (b === 1) {
                     alert('เชื่อมต่อใหม่สำเร็จ!');
                 }
+                setTimeout(() => {
+                    location.reload();
+                }, 4500);
+
             } else {
                 alert('กรุณากรอกข้อมูลให้ครบถ้วน');
             }
@@ -1864,6 +1868,12 @@ SECURE MQTT CONNECTION
                 client.subscribe('/status_V')
                 client.subscribe('/update_available');     // หรือ '/firmware_update_available', '/new_version'
 
+                cout3 = 1; // ตัวแปรนี้จะถูกใช้เพื่อควบคุมการแจ้งเตือนเมื่อการเชื่อมต่อ MQTT หายไป
+
+                if (cout4 === 1) {
+                    alert('MQTT Connected Successfully ✅');
+                    cout4 = 0;
+                }
             });
 
             client.on('close', () => {
@@ -1871,6 +1881,12 @@ SECURE MQTT CONNECTION
                 if (st) {
                     st.innerHTML = '<i class="fas fa-unlink" style="color:var(--danger-color); font-size:14px; margin-right:8px;"></i> MQTT: Disconnected';
                     st.style.color = "var(--danger-color)";
+                    cout4 = 1; // ตัวแปรนี้จะถูกใช้เพื่อควบคุมการแจ้งเตือนเมื่อการเชื่อมต่อ MQTT กลับมาใหม่
+                    if (cout3 === 1) {
+
+                        alert('MQTT Connection Lost ❌');
+                        cout3 = 0;
+                    }
                 }
             });
 
@@ -2007,6 +2023,7 @@ SECURE MQTT CONNECTION
                             if (cout2 === 1) {
                                 sendTelegramMessage('ESP32 is Online ✅');
                                 send_mqtt('/status_V', 'ESP32 is Online ✅');
+                                alert('ESP32 is Online ✅ แจ้งเตือนผ่าน Telegram เรียบร้อย ✅');
                                 cout2 = 0;
                             }
 
@@ -2018,7 +2035,7 @@ SECURE MQTT CONNECTION
                             if (cout === 1) {
                                 sendTelegramMessage('❗❗ESP32 is Offline❗❗');
                                 send_mqtt('/status_V', '❗❗esp32 is offline ❗❗ ');
-
+                                alert('❗❗ESP32 is Offline❗❗ แจ้งเตือนผ่าน Telegram เรียบร้อย ✅');
                                 cout = 0;
                             }
 
@@ -2378,7 +2395,7 @@ SECURE MQTT CONNECTION
         var Sun_off = 0, Mon_off = 0, Tue_off = 0, Wed_off = 0, Thu_off = 0, Fri_off = 0, Sat_off = 0;
         var Status_set_teMp, Status_set_HuMi, Status_set_teMp_Low, Status_set_HuMi_Low, Status_set_teMp_High, Status_set_HuMi_High;
         var Status_RP_minute, Status_RP_minute_hour;
-        var cout = null; var cout2 = null;
+        var cout = null; var cout2 = null; var cout3 = null; var cout4 = null;
 
 
         function send_mqtt_interlock(send_mqtt1, mass1) {
