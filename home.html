@@ -481,10 +481,7 @@
 
     <script>
 
-        // ตรวจสอบสถานะ login ก่อนโหลดหน้า
-        if (sessionStorage.getItem("isLoggedIn") !== "true") {
-            window.location.href = "index.html";
-        }
+
         /* ฟังก์ชันดึงเวลาปัจจุบันใส่ในช่อง Input */
         function setCurrentTime() {
             setTimeout(() => {
@@ -509,7 +506,7 @@
 
         function go(page) {
             const app = document.getElementById('app');
-            localStorage.setItem('currentPage', page);
+            sessionStorage.setItem('currentPage', page);
             if (page === 'home') {
                 app.innerHTML = `
         <div class="card">
@@ -1630,10 +1627,10 @@ SECURE MQTT CONNECTION
             current_page = 'home';
             window.location.href = "index.html";
             // 3. สั่งให้แอปวาดหน้าจอใหม่ (ไปหน้า login)
-            localStorage.removeItem('ESP32_disconnected_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อเมื่อเชื่อมต่อสำเร็จ
-            localStorage.removeItem('ESP32_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อสำเร็จ
-            localStorage.removeItem('mqtt_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อสำเร็จ
-            localStorage.removeItem('mqtt_lost_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อ
+            sessionStorage.removeItem('ESP32_disconnected_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อเมื่อเชื่อมต่อสำเร็จ
+            sessionStorage.removeItem('ESP32_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อสำเร็จ
+            sessionStorage.removeItem('mqtt_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อสำเร็จ
+            sessionStorage.removeItem('mqtt_lost_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อ
             sessionStorage.removeItem("isLoggedIn"); // ลบสถานะการเข้าสู่ระบบ
 
             go('home');
@@ -1644,7 +1641,7 @@ SECURE MQTT CONNECTION
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const page = localStorage.getItem('currentPage') || 'home';
+            const page = sessionStorage.getItem('currentPage') || 'home';
             go(page);
         });
 
@@ -1726,8 +1723,8 @@ SECURE MQTT CONNECTION
 
                 setTimeout(() => {
                     location.reload();
-                    localStorage.removeItem('mqtt_connected_alerted');
-                    localStorage.removeItem('mqtt_lost_alerted');
+                    sessionStorage.removeItem('mqtt_connected_alerted');
+                    sessionStorage.removeItem('mqtt_lost_alerted');
                 }, 1000);
 
 
@@ -1936,12 +1933,12 @@ SECURE MQTT CONNECTION
 
 
 
-                if (!localStorage.getItem('mqtt_connected_alerted')) {
+                if (!sessionStorage.getItem('mqtt_connected_alerted')) {
                     setTimeout(() => {
                         alert('MQTT Connected Successfully ✅');
                     }, 1000);
 
-                    localStorage.setItem('mqtt_connected_alerted', 'true');
+                    sessionStorage.setItem('mqtt_connected_alerted', 'true');
                 }
 
             });
@@ -1952,12 +1949,12 @@ SECURE MQTT CONNECTION
                     st.innerHTML = '<i class="fas fa-unlink" style="color:var(--danger-color); font-size:14px; margin-right:8px;"></i>MQTT: Disconnected';
                     st.style.color = "var(--danger-color)";
 
-                    if (!localStorage.getItem('mqtt_lost_alerted')) {
+                    if (!sessionStorage.getItem('mqtt_lost_alerted')) {
                         setTimeout(() => {
                             alert('MQTT Connection Lost ❌');
                         }, 1000);
 
-                        localStorage.setItem('mqtt_lost_alerted', 'true');
+                        sessionStorage.setItem('mqtt_lost_alerted', 'true');
                     }
 
                 }
@@ -2091,28 +2088,28 @@ SECURE MQTT CONNECTION
                             // ตอนออนไลน์ → ใช้ไอคอนชิปสีเขียว
                             espBadge.innerHTML = '<i class="fas fa-microchip" style="color:var(--success-color); font-size:14px; margin-right:8px;"></i> ESP: Online';
                             espBadge.style.color = "var(--success-color)";
-                            localStorage.removeItem('ESP32_disconnected_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อเมื่อเชื่อมต่อสำเร็จ
+                            sessionStorage.removeItem('ESP32_disconnected_alerted'); // รีเซ็ตการแจ้งเตือนการตัดการเชื่อมต่อเมื่อเชื่อมต่อสำเร็จ
 
-                            if (!localStorage.getItem('ESP32_connected_alerted')) {
+                            if (!sessionStorage.getItem('ESP32_connected_alerted')) {
                                 setTimeout(() => {
                                     alert('ESP32 Connected Successfully ✅');
                                 }, 1000);
 
-                                localStorage.setItem('ESP32_connected_alerted', 'true');
+                                sessionStorage.setItem('ESP32_connected_alerted', 'true');
                             }
 
                         } else {
                             // ตอนออฟไลน์ → ใช้วงกลมแดง (เหมือนเดิม)
                             espBadge.innerHTML = '<i class="fas fa-circle" style="color:var(--danger-color); font-size:8px; margin-right:8px;"></i> ESP: Offline';
                             espBadge.style.color = "var(--danger-color)";
-                            localStorage.removeItem('ESP32_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อเมื่อแจ้งเตือนการตัดการเชื่อมต่อแล้ว
+                            sessionStorage.removeItem('ESP32_connected_alerted'); // รีเซ็ตการแจ้งเตือนการเชื่อมต่อเมื่อแจ้งเตือนการตัดการเชื่อมต่อแล้ว
 
-                            if (!localStorage.getItem('ESP32_disconnected_alerted')) {
+                            if (!sessionStorage.getItem('ESP32_disconnected_alerted')) {
                                 setTimeout(() => {
                                     alert('ESP32 Disconnected ❌');
                                 }, 1000);
 
-                                localStorage.setItem('ESP32_disconnected_alerted', 'true');
+                                sessionStorage.setItem('ESP32_disconnected_alerted', 'true');
                             }
 
                         }
